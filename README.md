@@ -26,7 +26,7 @@ Hello my friends
 * Start the tests for processors, usecases, repositories and datasources - 
         `./gradlew test -x :app:test -PisEngBuild=false --no-build-cache`
 * Analyzing dependencies for vulnerabilities - `./gradlew dependencyCheckAnalyze`
-* Sending the deeplink which displays the second homepage screen -
+* Sending the deeplink which opens the app and displays the second homepage screen -
         `./adb shell am start -d "architecture://home_screen_details/GOOG" -W -a android.intent.action.VIEW` 
 * it's necessary to have Tiingo token (sign-up for a free account) to get the real data from Tiingo 
   (https://www.tiingo.com/) and put the token into `buildConfigField` in `BaseExtensionConfigs` file.
