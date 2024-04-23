@@ -1,4 +1,4 @@
-Hello my friends  
+Hello, Friends!   
 
 # Tech stack of the base project:   
     `Clean Architecture, Single Activity, MVI, Hilt/Dagger, Coroutines, 
@@ -38,7 +38,7 @@ Hello my friends
 * Change Dagger scope of the features 
 * Check the network communication
 * Add tests for the navigation 
-* Add Room, GraphQL, Websockets, BLE, NFC features 
+* Add Pushes, Room, GraphQL, Websockets, BLE, NFC features 
 
 # If you have any questions
 
