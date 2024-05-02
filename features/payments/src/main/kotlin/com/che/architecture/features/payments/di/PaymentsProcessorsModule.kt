@@ -5,7 +5,7 @@ import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.processor.EmptyIntentionProcessor
 import com.che.architecture.features.payments.mvi.processor.FailureIntentionProcessor
-import com.che.architecture.features.payments.mvi.processor.InitialIntentionProcessor
+import com.che.architecture.features.payments.mvi.processor.GetTickerPriceIntentionProcessor
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoSet
@@ -16,7 +16,7 @@ internal abstract class PaymentsProcessorsModule {
     @IntoSet
     @Binds
     internal abstract fun bindsInitialIntentionProcessor(
-        it: InitialIntentionProcessor
+        it: GetTickerPriceIntentionProcessor
     ): IntentionProcessor<PaymentsState, PaymentsIntention>
 
     @IntoSet

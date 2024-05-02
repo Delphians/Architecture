@@ -4,7 +4,7 @@ import com.che.architecture.domain.model.Ticker
 import java.time.LocalDate
 
 internal sealed interface PaymentsIntention {
-    data class InitialIntention(
+    data class GetTickerPriceIntention(
         val ticker: Ticker,
         val dateRange: ClosedRange<LocalDate>
     ) : PaymentsIntention
