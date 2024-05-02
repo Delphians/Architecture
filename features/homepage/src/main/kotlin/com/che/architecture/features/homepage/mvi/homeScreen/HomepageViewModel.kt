@@ -1,4 +1,4 @@
-package com.che.architecture.features.homepage.mvi
+package com.che.architecture.features.homepage.mvi.homeScreen
 
 import com.che.architecture.base.mvi.DefaultStateStoreFactory
 import com.che.architecture.base.mvi.DefaultViewModel

@@ -6,10 +6,10 @@ import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.MviViewModel
-import com.che.architecture.features.homepage.mvi.HomepageIntention
-import com.che.architecture.features.homepage.mvi.HomepageState
-import com.che.architecture.features.homepage.mvi.HomepageUiEvent
-import com.che.architecture.features.homepage.mvi.HomepageViewModel
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
