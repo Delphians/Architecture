@@ -19,12 +19,12 @@ import kotlinx.coroutines.flow.transform
 import javax.inject.Inject
 
 @SuppressWarnings("UnusedPrivateProperty")
-internal class InitialIntentionProcessor @Inject constructor(
+internal class GetTickerPriceIntentionProcessor @Inject constructor(
     private val dailyTickerPrices: DailyTickerPrices
 ) : IntentionProcessor<PaymentsState, PaymentsIntention> {
 
     override fun process(intentions: Flow<PaymentsIntention>): Flow<MviResult<PaymentsState>> =
-        intentions.filterIsInstance<PaymentsIntention.InitialIntention>()
+        intentions.filterIsInstance<PaymentsIntention.GetTickerPriceIntention>()
             .transform {
                 emit(LoadingResults)
 
