@@ -31,8 +31,8 @@ import java.text.DecimalFormat
 
 @Composable
 internal fun PaymentsScreen(
-    paymentsState: PaymentsState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paymentsState: PaymentsState
 ) {
     LazyColumn(
         modifier = modifier

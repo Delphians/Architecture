@@ -17,8 +17,8 @@ import com.che.architecture.ui.compose.foundation.dimension.LocalPadding
 @SuppressWarnings("MagicNumber")
 @Composable
 fun DrawChart(
-    chartPoints: List<Double>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    chartPoints: List<Double>
 ) {
     Canvas(
         modifier = modifier
