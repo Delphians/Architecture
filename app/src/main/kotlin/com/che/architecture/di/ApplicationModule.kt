@@ -6,7 +6,6 @@ import com.che.architecture.data.di.RepositoriesModule
 import com.che.architecture.data.remote.tiingo.ProvidedNames
 import com.che.architecture.domain.di.ErrorDomainModule
 import com.che.architecture.domain.di.UseCaseModule
-import com.che.architecture.features.shared.di.AppMviModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +14,6 @@ import javax.inject.Named
 
 @Module(
     includes = [
-        AppMviModule::class,
         KtorModule::class,
         RepositoriesModule::class,
         UseCaseModule::class,

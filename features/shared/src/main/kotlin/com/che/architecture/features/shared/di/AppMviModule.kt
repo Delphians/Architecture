@@ -12,8 +12,11 @@ import com.che.architecture.features.shared.app.AppMviViewModel
 import com.che.architecture.features.shared.app.AppUiEvent
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
 @Module(includes = [AppMviProcessorsModule::class])
+@InstallIn(ActivityComponent::class)
 abstract class AppMviModule {
 
     @Binds
