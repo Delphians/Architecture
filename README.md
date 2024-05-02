@@ -35,9 +35,8 @@ Hello, Friends!
 
 # Future plans
 
-* Change Dagger scope of the features 
 * Check the network communication
-* Add tests for the navigation 
+* Add navigation tests  
 * Add ExoPlayer(DASH over HTTPs), Location, Pushes, Room, GraphQL, Websockets, BLE, NFC features 
 
 # If you have any questions
