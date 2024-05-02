@@ -22,6 +22,7 @@ dependencies {
         project(":features:shared"),
         project(":ui:compose"),
         project(":base"),
+        project(":baseAndroid"),
         project(":domain")
     )
     useDagger()
