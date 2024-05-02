@@ -24,8 +24,8 @@ import com.che.architecture.ui.compose.foundation.dimension.LocalPadding
 
 @Composable
 internal fun HomeScreenDetails(
-    ticker: Ticker,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    ticker: Ticker
 ) {
     Box(
         modifier
@@ -62,7 +62,6 @@ internal fun HomeScreenDetails(
     }
 }
 
-@SuppressWarnings("UnusedPrivateMember")
 @PreviewLightDark
 @Composable
 private fun HomeScreenDetailsPreview() {
@@ -70,7 +69,7 @@ private fun HomeScreenDetailsPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
-            HomeScreenDetails(FakeStockData.fakeTicker)
+            HomeScreenDetails(ticker = FakeStockData.fakeTicker)
         }
     }
 }

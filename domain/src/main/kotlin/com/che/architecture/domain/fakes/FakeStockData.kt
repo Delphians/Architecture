@@ -17,7 +17,7 @@ object FakeStockData {
     val dateRange: ClosedRange<LocalDate> =
         LocalDate.of(2012, 1, 3)..LocalDate.of(2012, 1, 4)
 
-    const val FAKE_DELAY: Long = 2000
+    const val FAKE_DELAY: Long = 1000
     private const val FAKE_ZERO = 0.0
 
     fun fakePricesGenerator(rangeOfDates: ClosedRange<LocalDate>): List<Price> {

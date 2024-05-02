@@ -15,16 +15,16 @@ import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
-internal class InitialIntentionProcessorTest {
+internal class GetTickerPriceIntentionProcessorTest {
 
     private val dailyTickerPrices: DailyTickerPrices = mockk()
-    private val testSubject = InitialIntentionProcessor(dailyTickerPrices)
+    private val testSubject = GetTickerPriceIntentionProcessor(dailyTickerPrices)
 
     @Test
-    fun `When send InitialIntention should get LoadingResults at first`() = runTest {
+    fun `When send GetTickerPriceIntention should get LoadingResults at first`() = runTest {
         val actualResult = testSubject.process(
             flowOf(
-                PaymentsIntention.InitialIntention(
+                PaymentsIntention.GetTickerPriceIntention(
                     FakeStockData.fakeTicker,
                     FakeStockData.dateRange
                 )
@@ -35,7 +35,7 @@ internal class InitialIntentionProcessorTest {
     }
 
     @Test
-    fun `When send InitialIntention should get DailyPriceResults`() = runTest {
+    fun `When send GetTickerPriceIntention should get DailyPriceResults`() = runTest {
         val dateRange = FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
         val prices = FakeStockData.fakePricesGenerator(dateRange)
 
@@ -47,7 +47,7 @@ internal class InitialIntentionProcessorTest {
 
         val results = testSubject.process(
             flowOf(
-                PaymentsIntention.InitialIntention(
+                PaymentsIntention.GetTickerPriceIntention(
                     FakeStockData.fakeTicker,
                     FakeStockData.dateRange
                 )
