@@ -12,8 +12,11 @@ import com.che.architecture.features.homepage.mvi.HomepageUiEvent
 import com.che.architecture.features.homepage.mvi.HomepageViewModel
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-@Module
+@Module(includes = [HomepageProcessorsModule::class])
+@InstallIn(ActivityComponent::class)
 abstract class HomepageModule {
 
     @Binds
