@@ -24,23 +24,43 @@ import com.che.architecture.ui.compose.molecules.Dialog
 import com.che.architecture.ui.compose.molecules.LoadingIndicator
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
+import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import dagger.Reusable
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@Reusable
 internal class PaymentsNavigationImpl @Inject constructor(
     private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>,
     private val errorListener: EventsListener<ErrorEvent>
-) : PaymentsNavigation {
+) : NavigationGraphBuilder {
 
     override val startDestination: String = PaymentsGraph.PaymentsScreen.route
+    override fun onResume(owner: LifecycleOwner) {
+        viewModel.dispatchIntention(
+            PaymentsIntention.GetTickerPriceIntention(
+                Ticker(FakeStockData.fakeTicker.value),
+                FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
+            )
+        )
+    }
+
+    override fun onStart(owner: LifecycleOwner) {
+        viewModel.start(owner.lifecycleScope)
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        viewModel.stop()
+    }
+
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
         modifier: Modifier
     ) {
         navGraphBuilder.composable(startDestination) {
+
             val paymentsNavController = rememberNavController()
-            val state = viewModel.state.collectAsState().value
 
             NavHost(
                 navController = paymentsNavController,
@@ -49,22 +69,17 @@ internal class PaymentsNavigationImpl @Inject constructor(
                 composable(
                     route = startDestination
                 ) {
-                    when {
-                        state.isLoading -> LoadingIndicator(modifier = Modifier.fillMaxSize())
-                        state.error != null -> FailureDialog(state.error)
-                        else -> PaymentsScreen(state)
+                    viewModel.state.collectAsState().value.let { state ->
+                        when {
+                            state.isLoading -> LoadingIndicator(modifier = Modifier.fillMaxSize())
+                            state.error != null -> FailureDialog(state.error)
+                            else -> PaymentsScreen(paymentsState = state)
+                        }
                     }
                 }
             }
 
             LaunchedEffect(key1 = Unit) {
-                viewModel.dispatchIntention(
-                    PaymentsIntention.InitialIntention(
-                        Ticker(FakeStockData.fakeTicker.value),
-                        FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
-                    )
-                )
-
                 errorListener.event.onEach { errorEvent ->
                     errorEvent.cause?.let {
                         viewModel.dispatchIntention(

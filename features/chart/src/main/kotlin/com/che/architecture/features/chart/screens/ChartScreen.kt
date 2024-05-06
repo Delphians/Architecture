@@ -21,8 +21,8 @@ import com.che.architecture.ui.compose.molecules.DrawChart
 
 @Composable
 internal fun ChartScreen(
-    chartState: ChartState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    chartState: ChartState
 ) {
     Card(
         modifier = Modifier
@@ -34,7 +34,7 @@ internal fun ChartScreen(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            DrawChart(chartState.points)
+            DrawChart(chartPoints = chartState.points)
         }
     }
 }

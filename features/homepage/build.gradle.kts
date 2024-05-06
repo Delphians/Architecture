@@ -21,6 +21,7 @@ dependencies {
         configurationName = ConfigurationName.IMPLEMENTATION,
         project(":features:shared"),
         project(":base"),
+        project(":baseAndroid"),
         project(":ui:compose"),
         project(":domain")
     )

@@ -2,8 +2,9 @@ package com.che.architecture.features.homepage.mvi.processor
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.domain.fakes.FakeStockData
-import com.che.architecture.features.homepage.mvi.HomepageIntention
-import com.che.architecture.features.homepage.mvi.HomepageUiEvent
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
+import com.che.architecture.features.homepage.mvi.homeScreen.processor.OpenScreenDetailsProcessor
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList

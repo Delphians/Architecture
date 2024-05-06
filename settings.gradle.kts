@@ -8,6 +8,7 @@ dependencyResolutionManagement {
 
 include(":app")
 include(":base")
+include(":baseAndroid")
 include(":data")
 include(":domain")
 include(":features:homepage")

@@ -60,6 +60,7 @@ dependencies {
         project(":data"),
         project(":domain"),
         project(":base"),
+        project(":baseAndroid"),
         project(":ui:compose"),
         project(":features:shared"),
         project(":features:homepage"),

@@ -4,64 +4,45 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.che.architecture.features.chart.navigation.ChartNavigation
-import com.che.architecture.features.homepage.navigation.HomepageNavigation
-import com.che.architecture.features.payments.navigation.PaymentsNavigation
+import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.tabs.BottomTab
+import dagger.hilt.android.scopes.ActivityScoped
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@ActivityScoped
 internal class TabNavigation @Inject constructor(
-    private val homepageNavigation: HomepageNavigation,
-    private val paymentsNavigation: PaymentsNavigation,
-    private val chartNavigation: ChartNavigation
+    private val navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
 ) {
 
-    val startDestination = homepageNavigation.startDestination
+    val startDestination = bindWithRoute(BottomTab.HOME)
 
     @Composable
     internal fun SetupTabNavigation(
-        navController: NavHostController,
-        modifier: Modifier = Modifier
+        modifier: Modifier = Modifier,
+        navController: NavHostController
     ) {
         NavHost(
             navController,
             startDestination = startDestination,
             modifier = modifier
         ) {
-            homepageNavigation.setupGraph(
-                navGraphBuilder = this,
-                modifier = modifier
-            )
-            paymentsNavigation.setupGraph(
-                navGraphBuilder = this,
-                modifier = modifier
-            )
-            chartNavigation.setupGraph(
-                navGraphBuilder = this,
-                modifier = modifier
-            )
+            navigationGraphBuilders.forEach {
+                it.setupGraph(
+                    navGraphBuilder = this,
+                    modifier = modifier
+                )
+            }
         }
     }
 
-    internal fun bindWithRoute(tab: BottomTab) = when {
-        tab.name.equals(
-            homepageNavigation.startDestination,
-            ignoreCase = true
-        ) -> homepageNavigation.startDestination
-
-        tab.name.equals(
-            paymentsNavigation.startDestination,
-            ignoreCase = true
-        ) -> paymentsNavigation.startDestination
-
-        tab.name.equals(
-            chartNavigation.startDestination,
-            ignoreCase = true
-        ) -> chartNavigation.startDestination
-
-        else -> throw IllegalArgumentException(" Something went wrong")
+    internal fun bindWithRoute(tab: BottomTab): String {
+        var destination: String? = null
+        navigationGraphBuilders.forEach {
+            if (tab.name.equals(it.startDestination, ignoreCase = true)) {
+                destination = it.startDestination
+            }
+        }
+        return destination ?: bindWithRoute(BottomTab.HOME)
     }
 
     internal fun routeBindWithTab(route: String): BottomTab = when {

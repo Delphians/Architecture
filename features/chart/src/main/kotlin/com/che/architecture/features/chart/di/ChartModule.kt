@@ -12,8 +12,11 @@ import com.che.architecture.features.chart.mvi.ChartUiEvent
 import com.che.architecture.features.chart.mvi.ChartViewModel
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityComponent
 
-@Module
+@Module(includes = [ChartProcessorsModule::class])
+@InstallIn(ActivityComponent::class)
 abstract class ChartModule {
 
     @Binds

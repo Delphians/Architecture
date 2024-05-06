@@ -21,7 +21,8 @@ dependencies {
     add(
         configurationName = ConfigurationName.IMPLEMENTATION,
         project(":ui:compose"),
-        project(":base")
+        project(":base"),
+        project(":baseAndroid")
     )
     useCompose(isNavigation = true)
     useDagger(true)

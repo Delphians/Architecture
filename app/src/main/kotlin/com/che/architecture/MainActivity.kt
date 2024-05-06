@@ -17,6 +17,7 @@ import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.features.shared.app.AppIntentions
 import com.che.architecture.features.shared.app.AppMviState
 import com.che.architecture.features.shared.app.AppUiEvent
+import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.navigation.TabNavigation
 import com.che.architecture.ui.compose.bottom.BottomNavigationBar
 import com.che.architecture.ui.compose.foundation.ArchitectureTheme
@@ -35,8 +36,13 @@ internal class MainActivity : ComponentActivity() {
     @Inject
     lateinit var appMviViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
 
+    @Inject
+    lateinit var navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        registerNavigationGraphBuilder()
 
         setContent {
             val navController = rememberNavController()
@@ -87,5 +93,24 @@ internal class MainActivity : ComponentActivity() {
                 AppIntentions.TabChangedIntention(it)
             )
         }
+    }
+
+    private fun registerNavigationGraphBuilder() {
+        navigationGraphBuilders.forEach(lifecycle::addObserver)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        appMviViewModel.start(lifecycleScope)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        appMviViewModel.stop()
+    }
+
+    override fun onDestroy() {
+        navigationGraphBuilders.forEach(lifecycle::removeObserver)
+        super.onDestroy()
     }
 }

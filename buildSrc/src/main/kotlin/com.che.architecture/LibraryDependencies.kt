@@ -14,6 +14,7 @@ object Versions {
     object Androidx {
         const val core = "1.12.0"
         const val activityCompose = "1.8.2"
+        const val lifecycleVersion = "2.7.0"
 
         object Compose {
             private const val core = "1.6.6"
@@ -54,6 +55,9 @@ object Libraries {
             const val navigation =
                 "androidx.navigation:navigation-compose:${Versions.Androidx.Compose.navigation}"
         }
+
+        const val lifecycleProcess = "androidx.lifecycle:lifecycle-process:" +
+                Versions.Androidx.lifecycleVersion
     }
 
     object Kotlinx {

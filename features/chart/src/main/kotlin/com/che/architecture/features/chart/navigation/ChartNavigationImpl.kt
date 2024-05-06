@@ -3,6 +3,8 @@ package com.che.architecture.features.chart.navigation
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,17 +15,24 @@ import com.che.architecture.features.chart.mvi.ChartIntention
 import com.che.architecture.features.chart.mvi.ChartState
 import com.che.architecture.features.chart.mvi.ChartUiEvent
 import com.che.architecture.features.chart.screens.ChartScreen
+import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.molecules.WarningScreen
+import dagger.Reusable
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@SuppressWarnings("MagicNumber")
-@Singleton
+@Reusable
 internal class ChartNavigationImpl @Inject constructor(
     private val viewModel: MviViewModel<ChartState, ChartIntention, ChartUiEvent>
-) : ChartNavigation {
+) : NavigationGraphBuilder {
 
     override val startDestination: String = ChartGraph.ChartRouteScreen.route
+
+    override fun onStart(owner: LifecycleOwner) {
+        viewModel.start(owner.lifecycleScope)
+    }
+    override fun onStop(owner: LifecycleOwner) {
+        viewModel.stop()
+    }
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -39,7 +48,7 @@ internal class ChartNavigationImpl @Inject constructor(
             ) {
                 composable(startDestination) {
                     if (state.points.isNotEmpty()) {
-                        ChartScreen(state)
+                        ChartScreen(chartState = state)
                     } else {
                         WarningScreen()
                     }
