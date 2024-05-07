@@ -2,40 +2,26 @@ package com.che.architecture.features.chart.di
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.DefaultIntentionDispatcher
-import com.che.architecture.base.mvi.interfaces.EventsDispatcher
+import com.che.architecture.base.mvi.DefaultStateStore
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
-import com.che.architecture.base.mvi.interfaces.MviViewModel
+import com.che.architecture.base.mvi.interfaces.IntentionProcessor
+import com.che.architecture.base.mvi.interfaces.StateStore
 import com.che.architecture.features.chart.mvi.ChartIntention
 import com.che.architecture.features.chart.mvi.ChartState
 import com.che.architecture.features.chart.mvi.ChartUiEvent
-import com.che.architecture.features.chart.mvi.ChartViewModel
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
+import com.che.architecture.features.chart.mvi.processors.InitialIntentionProcessor
 
-@Module(includes = [ChartProcessorsModule::class])
-@InstallIn(ActivityComponent::class)
-abstract class ChartModule {
+internal object ChartModule {
+    fun getEventListener(): EventsListener<ChartUiEvent> =
+        DefaultEventsHandler()
 
-    @Binds
-    internal abstract fun bindsMviViewModel(
-        it: ChartViewModel
-    ): MviViewModel<ChartState, ChartIntention, ChartUiEvent>
+    fun getIntentionDispatcher(): IntentionDispatcher<ChartIntention> =
+        DefaultIntentionDispatcher()
 
-    @Binds
-    internal abstract fun bindsEventListener(
-        handler: DefaultEventsHandler<ChartUiEvent>
-    ): EventsListener<ChartUiEvent>
+    fun getStateStore(): StateStore<ChartState> =
+        DefaultStateStore(ChartState())
 
-    @Binds
-    internal abstract fun bindsEventDispatcher(
-        handler: DefaultEventsHandler<ChartUiEvent>
-    ): EventsDispatcher<ChartUiEvent>
-
-    @Binds
-    internal abstract fun bindsIntentionDispatcher(
-        dispatcher: DefaultIntentionDispatcher<ChartIntention>
-    ): IntentionDispatcher<ChartIntention>
+    fun getChartProcessors(): Set<IntentionProcessor<ChartState, ChartIntention>> =
+        setOf(InitialIntentionProcessor())
 }

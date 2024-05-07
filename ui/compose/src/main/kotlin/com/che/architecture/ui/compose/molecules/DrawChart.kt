@@ -20,6 +20,8 @@ fun DrawChart(
     modifier: Modifier = Modifier,
     chartPoints: List<Double>
 ) {
+    if (chartPoints.isEmpty()) return
+
     Canvas(
         modifier = modifier
             .fillMaxWidth()

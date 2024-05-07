@@ -9,9 +9,8 @@ import com.che.architecture.features.chart.mvi.SetPointsResults
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.transform
-import javax.inject.Inject
 
-internal class InitialIntentionProcessor @Inject constructor() :
+internal class InitialIntentionProcessor :
     IntentionProcessor<ChartState, ChartIntention> {
 
     override fun process(intentions: Flow<ChartIntention>): Flow<MviResult<ChartState>> =
