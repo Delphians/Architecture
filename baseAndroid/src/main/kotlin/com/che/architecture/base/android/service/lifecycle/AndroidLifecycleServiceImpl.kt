@@ -5,11 +5,8 @@ import androidx.lifecycle.LifecycleOwner
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class AndroidLifecycleServiceImpl @Inject constructor(
+internal class AndroidLifecycleServiceImpl(
     private val processLifecycleOwner: LifecycleOwner
 ) : AndroidLifecycleService, DefaultLifecycleObserver {
 
