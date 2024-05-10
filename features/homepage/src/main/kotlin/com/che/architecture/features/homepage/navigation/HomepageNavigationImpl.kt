@@ -1,16 +1,13 @@
 package com.che.architecture.features.homepage.navigation
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.domain.model.Ticker
+import com.che.architecture.features.homepage.di.HomepageModule.getViewModel
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
@@ -18,45 +15,40 @@ import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScree
 import com.che.architecture.features.homepage.screens.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreenDetails
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
-import dagger.Reusable
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-@Reusable
-internal class HomepageNavigationImpl @Inject constructor(
-    private val viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
-) : NavigationGraphBuilder {
+internal class HomepageNavigationImpl : NavigationGraphBuilder {
 
     override val startDestination: String = HomepageGraph.HomeScreen.route
 
+    private lateinit var viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
+
+    private lateinit var coroutineScope: CoroutineScope
+
     override fun onStart(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
+        coroutineScope = CoroutineScope(Dispatchers.Unconfined)
+        viewModel = getViewModel().also {
+            it.start(coroutineScope)
+        }
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        viewModel.stop()
+        coroutineScope.cancel()
     }
 
     override fun setupGraph(
+        modifier: Modifier,
         navGraphBuilder: NavGraphBuilder,
-        modifier: Modifier
+        navController: NavController
     ) {
-        navGraphBuilder.composable(startDestination) {
-            val homeNavController = rememberNavController()
-
-            NavHost(
-                navController = homeNavController,
-                startDestination = startDestination
-            ) {
-                handleScreenDetails()
-                handleHomeScreenDetails()
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                handleUiEvent(homeNavController)
-            }
+        navGraphBuilder.run {
+            handleScreenDetails()
+            handleHomeScreenDetails()
+            handleUiEvent(coroutineScope, navController)
         }
     }
 
@@ -84,13 +76,13 @@ internal class HomepageNavigationImpl @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.handleUiEvent(controller: NavHostController) {
+    private fun handleUiEvent(coroutineScope: CoroutineScope, controller: NavController) {
         viewModel.event.onEach {
             when (it) {
                 is HomepageUiEvent.NavigateToDetails -> controller.navigate(
                     "${HomeScreenDetails.route}/${it.ticker.value}"
                 )
             }
-        }.launchIn(this)
+        }.launchIn(coroutineScope)
     }
 }

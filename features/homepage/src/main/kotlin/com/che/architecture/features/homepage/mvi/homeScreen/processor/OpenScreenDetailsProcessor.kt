@@ -10,9 +10,8 @@ import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-internal class OpenScreenDetailsProcessor @Inject constructor(
+internal class OpenScreenDetailsProcessor(
     private val eventDispatcher: EventsDispatcher<HomepageUiEvent>
 ) :
     IntentionProcessor<HomepageState, HomepageIntention> {
