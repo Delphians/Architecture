@@ -29,7 +29,7 @@ internal class TabChangedIntentionProcessorTest {
         val result =
             testSubject.process(flowOf(AppIntentions.TabChangedIntention(BottomTab.PAYMENTS)))
                 .firstOrNull()
-        assertEquals(emptyResult<AppMviState>(), result)
+        assertEquals(emptyResult<AppState>(), result)
     }
 
     @Test

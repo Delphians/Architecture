@@ -5,18 +5,17 @@ import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviResult
 import com.che.architecture.base.mvi.interfaces.ignoreResult
 import com.che.architecture.features.shared.app.AppIntentions
-import com.che.architecture.features.shared.app.AppMviState
+import com.che.architecture.features.shared.app.AppState
 import com.che.architecture.features.shared.app.AppUiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-internal class TabChangedIntentionProcessor @Inject constructor(
+internal class TabChangedIntentionProcessor(
     private val eventsDispatcher: EventsDispatcher<AppUiEvent>
-) : IntentionProcessor<AppMviState, AppIntentions> {
+) : IntentionProcessor<AppState, AppIntentions> {
 
-    override fun process(intentions: Flow<AppIntentions>): Flow<MviResult<AppMviState>> =
+    override fun process(intentions: Flow<AppIntentions>): Flow<MviResult<AppState>> =
         intentions.filterIsInstance<AppIntentions.TabChangedIntention>()
             .onEach {
                 eventsDispatcher.dispatch(
