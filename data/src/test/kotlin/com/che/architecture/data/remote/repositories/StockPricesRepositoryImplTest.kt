@@ -1,6 +1,10 @@
 package com.che.architecture.data.remote.repositories
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
+import com.che.architecture.data.remote.tiingo.TiingoDataSource
+import com.che.architecture.data.remote.utils.FakeData
+import com.che.architecture.data.remote.utils.FakeData.fakeUrlBuilder
+import com.che.architecture.data.remote.utils.createMockHttpClient
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.dateRange
 import com.che.architecture.domain.fakes.FakeStockData.FAKE_TIINGO_URL
@@ -19,7 +23,13 @@ internal class StockPricesRepositoryImplTest {
     private val testSubject = StockPricesRepositoryImpl(
         tiingoBaseUrl = FAKE_TIINGO_URL,
         tiingoToken = FAKE_TOKEN,
-        errorDispatcher = defaultEventsHandler
+        errorDispatcher = defaultEventsHandler,
+        tiingoDataSource = TiingoDataSource(
+            tiingoBaseUrl = FAKE_TIINGO_URL,
+            tiingoToken = FAKE_TOKEN,
+            tiingoUrlBuilder = fakeUrlBuilder,
+            ktorClient = createMockHttpClient(FakeData.mockEngine)
+        )
     )
 
     @Test
