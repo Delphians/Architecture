@@ -11,7 +11,7 @@ import com.che.architecture.data.remote.tiingo.TiingoPathParams.PRICES
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import io.ktor.client.HttpClient
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 internal class TiingoDataSource(
     private val tiingoBaseUrl: String,

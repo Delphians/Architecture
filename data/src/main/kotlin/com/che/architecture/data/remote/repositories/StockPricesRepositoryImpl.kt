@@ -7,13 +7,13 @@ import com.che.architecture.domain.model.ErrorEvent
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import com.che.architecture.domain.repositories.StockPricesRepository
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 internal class StockPricesRepositoryImpl(
     private val tiingoBaseUrl: String,
     private val tiingoToken: String,
-    private val tiingoDataSource: TiingoDataSource = TiingoDataSource(tiingoBaseUrl, tiingoToken),
     private val errorDispatcher: EventsDispatcher<ErrorEvent>,
+    private val tiingoDataSource: TiingoDataSource = TiingoDataSource(tiingoBaseUrl, tiingoToken)
 ) : StockPricesRepository {
 
     override suspend fun getDailyTickerPrices(

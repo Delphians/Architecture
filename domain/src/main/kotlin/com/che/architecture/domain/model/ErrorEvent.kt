@@ -1,6 +1,6 @@
 package com.che.architecture.domain.model
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 sealed interface ErrorEvent {
     val cause: Throwable?

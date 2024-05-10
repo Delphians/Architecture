@@ -2,9 +2,6 @@ package com.che.architecture.data.remote.tiingo
 
 import com.che.architecture.data.remote.Failure
 import com.che.architecture.data.remote.Success
-import com.che.architecture.data.remote.utils.FakeData.engine
-import com.che.architecture.data.remote.utils.FakeData.fakeUrlBuilder
-import com.che.architecture.data.remote.utils.createMockHttpClient
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.dateRange
 import com.che.architecture.domain.model.Ticker
@@ -17,7 +14,10 @@ import kotlin.time.Duration.Companion.seconds
 
 internal class TiingoDataSourceTest {
 
-    private val testSubject = TiingoDataSource(createMockHttpClient(engine), fakeUrlBuilder)
+    private val testSubject = TiingoDataSource(
+        tiingoBaseUrl = FakeStockData.FAKE_TIINGO_URL,
+        tiingoToken = FakeStockData.FAKE_TOKEN
+    )
 
     @Test
     fun `getDailyTickerPriceData method should return Success response`() =

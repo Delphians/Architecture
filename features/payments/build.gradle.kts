@@ -22,7 +22,8 @@ dependencies {
         project(":ui:compose"),
         project(":base"),
         project(":baseAndroid"),
-        project(":domain")
+        project(":domain"),
+        Libraries.Kotlinx.dateTime
     )
     useCompose(isFullPackage = true, isNavigation = true)
 

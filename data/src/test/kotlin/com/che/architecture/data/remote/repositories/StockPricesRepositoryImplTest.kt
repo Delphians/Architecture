@@ -1,12 +1,10 @@
 package com.che.architecture.data.remote.repositories
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
-import com.che.architecture.data.remote.tiingo.TiingoDataSource
-import com.che.architecture.data.remote.tiingo.mockTiingoBuilder
-import com.che.architecture.data.remote.utils.FakeData.engine
-import com.che.architecture.data.remote.utils.createMockHttpClient
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.dateRange
+import com.che.architecture.domain.fakes.FakeStockData.FAKE_TIINGO_URL
+import com.che.architecture.domain.fakes.FakeStockData.FAKE_TOKEN
 import com.che.architecture.domain.model.ErrorEvent
 import com.che.architecture.domain.model.Ticker
 import kotlinx.coroutines.flow.first
@@ -19,11 +17,9 @@ internal class StockPricesRepositoryImplTest {
     private val defaultEventsHandler = DefaultEventsHandler<ErrorEvent>()
 
     private val testSubject = StockPricesRepositoryImpl(
-        TiingoDataSource(
-            createMockHttpClient(engine),
-            mockTiingoBuilder()
-        ),
-        defaultEventsHandler
+        tiingoBaseUrl = FAKE_TIINGO_URL,
+        tiingoToken = FAKE_TOKEN,
+        errorDispatcher = defaultEventsHandler
     )
 
     @Test

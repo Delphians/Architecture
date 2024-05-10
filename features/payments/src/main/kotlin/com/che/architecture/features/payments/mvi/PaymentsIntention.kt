@@ -1,7 +1,7 @@
 package com.che.architecture.features.payments.mvi
 
 import com.che.architecture.domain.model.Ticker
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 internal sealed interface PaymentsIntention {
     data class GetTickerPriceIntention(

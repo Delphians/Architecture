@@ -4,8 +4,7 @@ import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import com.che.architecture.domain.repositories.StockPricesRepository
 import com.che.architecture.domain.usecase.prices.DailyTickerPricesUseCase
-import java.time.LocalDate
-
+import kotlinx.datetime.LocalDate
 internal class DailyTickerPricesUseCaseImpl(
     private val stockPricesRepository: StockPricesRepository
 ) : DailyTickerPricesUseCase {

@@ -17,7 +17,8 @@ dependencies {
         Libraries.KtorClient.core,
         Libraries.KtorClient.cio,
         Libraries.KtorClient.serialization,
-        Libraries.KtorClient.content_negotiation
+        Libraries.KtorClient.content_negotiation,
+        Libraries.Kotlinx.dateTime
     )
 
     add(

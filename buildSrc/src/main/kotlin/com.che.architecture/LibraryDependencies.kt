@@ -29,6 +29,7 @@ object Versions {
     object Kotlinx {
         const val coroutines = "1.8.0"
         const val serialization = "1.6.3"
+        const val dateTime = "0.6.0-RC.2"
     }
 }
 
@@ -61,6 +62,7 @@ object Libraries {
     object Kotlinx {
         const val serialization =
             "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}"
+        const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.dateTime}"
     }
 
     object Coroutines {
