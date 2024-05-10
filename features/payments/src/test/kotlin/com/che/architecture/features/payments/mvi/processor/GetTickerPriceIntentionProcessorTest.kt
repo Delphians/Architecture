@@ -1,7 +1,7 @@
 package com.che.architecture.features.payments.mvi.processor
 
 import com.che.architecture.domain.fakes.FakeStockData
-import com.che.architecture.domain.usecase.prices.DailyTickerPrices
+import com.che.architecture.domain.usecase.prices.DailyTickerPricesUseCase
 import com.che.architecture.features.payments.mvi.DailyPriceResults
 import com.che.architecture.features.payments.mvi.LoadingResults
 import com.che.architecture.features.payments.mvi.PaymentsIntention
@@ -17,8 +17,8 @@ import org.junit.jupiter.api.Test
 
 internal class GetTickerPriceIntentionProcessorTest {
 
-    private val dailyTickerPrices: DailyTickerPrices = mockk()
-    private val testSubject = GetTickerPriceIntentionProcessor(dailyTickerPrices)
+    private val dailyTickerPricesUseCase: DailyTickerPricesUseCase = mockk()
+    private val testSubject = GetTickerPriceIntentionProcessor(dailyTickerPricesUseCase)
 
     @Test
     fun `When send GetTickerPriceIntention should get LoadingResults at first`() = runTest {
@@ -40,7 +40,7 @@ internal class GetTickerPriceIntentionProcessorTest {
         val prices = FakeStockData.fakePricesGenerator(dateRange)
 
         coEvery {
-            dailyTickerPrices(
+            dailyTickerPricesUseCase(
                 FakeStockData.fakeTicker, dateRange
             )
         } returns prices
