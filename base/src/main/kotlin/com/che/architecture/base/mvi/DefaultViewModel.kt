@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.shareIn
 class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val stateStore: StateStore<MviState>,
     private val eventsListener: EventsListener<Event>,
-    private val intentionProcessors: Set<@JvmSuppressWildcards IntentionProcessor<MviState, Intention>>,
+    private val intentionProcessors: Set<IntentionProcessor<MviState, Intention>>,
     private val intentionDispatcher: IntentionDispatcher<Intention>,
     private val initialIntention: Intention? = null
 ) : MviViewModel<MviState, Intention, Event> {

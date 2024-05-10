@@ -4,9 +4,8 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
-class DefaultIntentionDispatcher<Intention : Any> @Inject constructor() :
+class DefaultIntentionDispatcher<Intention : Any> :
     IntentionDispatcher<Intention> {
 
     override val intentions: MutableSharedFlow<Intention> = MutableSharedFlow(
