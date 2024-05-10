@@ -1,5 +1,6 @@
 package com.che.architecture.data.remote.tiingo
 
+import com.che.architecture.data.di.KtorModule.provideKtorClient
 import com.che.architecture.data.remote.Failure
 import com.che.architecture.data.remote.Result
 import com.che.architecture.data.remote.getSafeQuery
@@ -9,15 +10,14 @@ import com.che.architecture.data.remote.tiingo.TiingoPathParams.DateTime.START_D
 import com.che.architecture.data.remote.tiingo.TiingoPathParams.PRICES
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
-import dagger.Reusable
 import io.ktor.client.HttpClient
 import java.time.LocalDate
-import javax.inject.Inject
 
-@Reusable
-internal class TiingoDataSource @Inject constructor(
-    private val ktorClient: HttpClient,
-    private val tiingoUrlBuilder: TiingoUrlBuilder
+internal class TiingoDataSource(
+    private val tiingoBaseUrl: String,
+    private val tiingoToken: String,
+    private val tiingoUrlBuilder: TiingoUrlBuilder = TiingoUrlBuilder(tiingoBaseUrl, tiingoToken),
+    private val ktorClient: HttpClient = provideKtorClient()
 ) {
 
     suspend fun getDailyTickerPriceData(

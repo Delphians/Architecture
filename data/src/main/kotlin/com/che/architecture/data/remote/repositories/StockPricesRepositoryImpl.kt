@@ -8,13 +8,12 @@ import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import com.che.architecture.domain.repositories.StockPricesRepository
 import java.time.LocalDate
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class StockPricesRepositoryImpl @Inject constructor(
-    private val tiingoDataSource: TiingoDataSource,
-    private val errorDispatcher: EventsDispatcher<ErrorEvent>
+internal class StockPricesRepositoryImpl(
+    private val tiingoBaseUrl: String,
+    private val tiingoToken: String,
+    private val tiingoDataSource: TiingoDataSource = TiingoDataSource(tiingoBaseUrl, tiingoToken),
+    private val errorDispatcher: EventsDispatcher<ErrorEvent>,
 ) : StockPricesRepository {
 
     override suspend fun getDailyTickerPrices(
