@@ -7,7 +7,10 @@ import com.che.architecture.features.payments.di.PaymentsModule.paymentsModuleIn
 internal object ApplicationModule {
     fun buildPaymentsModule() {
         paymentsModuleInjection(
-            provideStockPricesRepository(BuildConfig.tiingoBaseUrl, BuildConfig.tiingoToken)
+            provideStockPricesRepository(
+                BuildConfig.tiingoBaseUrl,
+                BuildConfig.tiingoToken
+            )
         )
     }
 }
