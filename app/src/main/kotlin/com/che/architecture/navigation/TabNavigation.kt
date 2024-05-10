@@ -2,16 +2,15 @@ package com.che.architecture.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.che.architecture.ui.compose.R
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.tabs.BottomTab
-import dagger.hilt.android.scopes.ActivityScoped
-import javax.inject.Inject
 
-@ActivityScoped
-internal class TabNavigation @Inject constructor(
-    private val navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+internal class TabNavigation(
+    private val navigationGraphBuilders: Set<NavigationGraphBuilder>
 ) {
 
     val startDestination = bindWithRoute(BottomTab.HOME)
@@ -28,8 +27,9 @@ internal class TabNavigation @Inject constructor(
         ) {
             navigationGraphBuilders.forEach {
                 it.setupGraph(
+                    modifier = modifier,
                     navGraphBuilder = this,
-                    modifier = modifier
+                    navController = navController
                 )
             }
         }
@@ -45,10 +45,11 @@ internal class TabNavigation @Inject constructor(
         return destination ?: bindWithRoute(BottomTab.HOME)
     }
 
+    @Composable
     internal fun routeBindWithTab(route: String): BottomTab = when {
         route.equals(BottomTab.CHART.name, true) -> BottomTab.CHART
         route.equals(BottomTab.HOME.name, true) -> BottomTab.HOME
         route.equals(BottomTab.PAYMENTS.name, ignoreCase = true) -> BottomTab.PAYMENTS
-        else -> throw IllegalArgumentException(" Something went wrong")
+        else -> throw IllegalArgumentException(stringResource(id = R.string.somethingWentWrong))
     }
 }
