@@ -4,7 +4,7 @@ import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import java.time.LocalDate
 
-interface DailyTickerPrices {
+interface DailyTickerPricesUseCase {
     suspend operator fun invoke(
         ticker: Ticker,
         dateRange: ClosedRange<LocalDate>

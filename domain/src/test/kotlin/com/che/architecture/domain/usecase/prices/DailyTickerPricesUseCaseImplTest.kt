@@ -2,14 +2,14 @@ package com.che.architecture.domain.usecase.prices
 
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.repositories.FakeStockPricesRepository
-import com.che.architecture.domain.usecase.prices.implementation.DailyTickerPricesImpl
+import com.che.architecture.domain.usecase.prices.implementation.DailyTickerPricesUseCaseImpl
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class DailyTickerPricesImplTest {
+internal class DailyTickerPricesUseCaseImplTest {
 
-    private val testSubject = DailyTickerPricesImpl(FakeStockPricesRepository())
+    private val testSubject = DailyTickerPricesUseCaseImpl(FakeStockPricesRepository())
 
     @Test
     fun `Usecase should return prices list`() = runTest {
