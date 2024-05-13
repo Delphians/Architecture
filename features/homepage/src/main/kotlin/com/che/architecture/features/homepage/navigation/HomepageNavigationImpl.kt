@@ -30,7 +30,7 @@ internal class HomepageNavigationImpl : NavigationGraphBuilder {
     private lateinit var coroutineScope: CoroutineScope
 
     override fun onStart(owner: LifecycleOwner) {
-        coroutineScope = CoroutineScope(Dispatchers.Unconfined)
+        coroutineScope = CoroutineScope(Dispatchers.Default)
         viewModel = getViewModel().also {
             it.start(coroutineScope)
         }

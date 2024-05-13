@@ -45,7 +45,7 @@ internal class DefaultViewModelTest {
 
     @Test
     fun `State should be changed when the minus intention was send`() = runTest {
-        val scope = CoroutineScope(Dispatchers.Unconfined)
+        val scope = CoroutineScope(Dispatchers.Default)
         testSubject.apply {
             start(scope)
             dispatchIntention(TestIntention.MinusIntention(1))
@@ -59,7 +59,7 @@ internal class DefaultViewModelTest {
     @Test
     fun `Plus intention should dispatch Plus event`() = runTest {
         testSubject.apply {
-            start(CoroutineScope(Dispatchers.Unconfined))
+            start(CoroutineScope(Dispatchers.Default))
             dispatchIntention(TestIntention.PlusIntention(1))
             assertEquals(TestEvent.Plus(1), event.first())
             stop()
