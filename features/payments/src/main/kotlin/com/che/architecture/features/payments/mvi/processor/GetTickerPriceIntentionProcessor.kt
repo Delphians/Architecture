@@ -6,7 +6,7 @@ import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.FAKE_DELAY
 import com.che.architecture.domain.fakes.FakeStockData.fakeEndDate
 import com.che.architecture.domain.fakes.FakeStockData.fakeStartDate
-import com.che.architecture.domain.usecase.prices.DailyTickerPricesUseCase
+import com.che.architecture.domain.repositories.StockPricesRepository
 import com.che.architecture.features.payments.mvi.DailyPriceResults
 import com.che.architecture.features.payments.mvi.EmptyResults
 import com.che.architecture.features.payments.mvi.LoadingResults
@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.transform
 
 @SuppressWarnings("UnusedPrivateProperty")
 internal class GetTickerPriceIntentionProcessor(
-    private val dailyTickerPricesUseCase: DailyTickerPricesUseCase
+    private val stockPricesRepository: StockPricesRepository
 ) : IntentionProcessor<PaymentsState, PaymentsIntention> {
 
     override fun process(intentions: Flow<PaymentsIntention>): Flow<MviResult<PaymentsState>> =
@@ -34,7 +34,7 @@ internal class GetTickerPriceIntentionProcessor(
                     .fakePricesGenerator(fakeStartDate..fakeEndDate)
 
                 // To get the real data from Tiingo
-                // val prices = dailyTickerPricesUseCase(it.ticker, it.dateRange)
+                //val prices = stockPricesRepository.getDailyTickerPrices(it.ticker, it.dateRange)
 
                 emit(
                     if (prices.isNotEmpty()) {

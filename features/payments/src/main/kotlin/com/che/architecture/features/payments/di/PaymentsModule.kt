@@ -10,9 +10,7 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
-import com.che.architecture.domain.di.UseCaseModule
 import com.che.architecture.domain.repositories.StockPricesRepository
-import com.che.architecture.domain.usecase.prices.DailyTickerPricesUseCase
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
@@ -22,20 +20,19 @@ import com.che.architecture.features.payments.mvi.processor.GetTickerPriceIntent
 
 object PaymentsModule {
 
-    private lateinit var dailyTickerPricesUseCase: DailyTickerPricesUseCase
+    private lateinit var getTickerPriceIntentionProcessor: GetTickerPriceIntentionProcessor
 
     fun paymentsModuleInjection(
         stockPricesRepository: StockPricesRepository
     ) {
-        dailyTickerPricesUseCase =
-            UseCaseModule.provideDailyTickerPricesUseCase(stockPricesRepository)
+        getTickerPriceIntentionProcessor = GetTickerPriceIntentionProcessor(stockPricesRepository)
     }
 
     internal fun getViewModel(): MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent> =
         DefaultViewModel(
             stateStore = getStateStore(),
             eventsListener = getEventListener(),
-            intentionProcessors = getProcessor(dailyTickerPricesUseCase),
+            intentionProcessors = getProcessor(),
             intentionDispatcher = getIntentionDispatcher()
         )
 
@@ -53,11 +50,9 @@ object PaymentsModule {
     private fun getIntentionDispatcher(): IntentionDispatcher<PaymentsIntention> =
         DefaultIntentionDispatcher()
 
-    private fun getProcessor(
-        dailyTickerPricesUseCase: DailyTickerPricesUseCase
-    ): Set<IntentionProcessor<PaymentsState, PaymentsIntention>> =
+    private fun getProcessor(): Set<IntentionProcessor<PaymentsState, PaymentsIntention>> =
         setOf(
-            GetTickerPriceIntentionProcessor(dailyTickerPricesUseCase),
+            getTickerPriceIntentionProcessor,
             FailureIntentionProcessor(),
             EmptyIntentionProcessor()
         )
