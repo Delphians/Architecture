@@ -31,7 +31,7 @@ import dagger.Reusable
 import javax.inject.Inject
 
 @Reusable
-internal class PaymentsNavigationImpl @Inject constructor(
+internal class PaymentsNavigation @Inject constructor(
     private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>,
     private val errorListener: EventsListener<ErrorEvent>
 ) : NavigationGraphBuilder {

@@ -21,7 +21,7 @@ import dagger.Reusable
 import javax.inject.Inject
 
 @Reusable
-internal class ChartNavigationImpl @Inject constructor(
+internal class ChartNavigation @Inject constructor(
     private val viewModel: MviViewModel<ChartState, ChartIntention, ChartUiEvent>
 ) : NavigationGraphBuilder {
 
@@ -30,6 +30,7 @@ internal class ChartNavigationImpl @Inject constructor(
     override fun onStart(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
     }
+
     override fun onStop(owner: LifecycleOwner) {
         viewModel.stop()
     }

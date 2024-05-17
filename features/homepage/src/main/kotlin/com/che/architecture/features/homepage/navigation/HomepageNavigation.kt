@@ -25,7 +25,7 @@ import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @Reusable
-internal class HomepageNavigationImpl @Inject constructor(
+internal class HomepageNavigation @Inject constructor(
     private val viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
 ) : NavigationGraphBuilder {
 
