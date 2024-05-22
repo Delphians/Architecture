@@ -46,12 +46,8 @@ internal class PaymentsNavigation @Inject constructor(
         )
     }
 
-    override fun onStart(owner: LifecycleOwner) {
+    override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        viewModel.stop()
     }
 
     override fun setupGraph(

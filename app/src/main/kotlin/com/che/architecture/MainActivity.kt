@@ -37,10 +37,12 @@ internal class MainActivity : ComponentActivity() {
     lateinit var appMviViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
 
     @Inject
-    lateinit var navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+    lateinit var navigationGraphs: Set<@JvmSuppressWildcards NavigationGraphBuilder>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appMviViewModel.start(lifecycleScope)
 
         registerNavigationGraphBuilder()
 
@@ -49,15 +51,15 @@ internal class MainActivity : ComponentActivity() {
 
             ArchitectureTheme {
                 val navBackStackEntry = navController.currentBackStackEntryAsState()
-                val currentRoute =
-                    navBackStackEntry.value?.destination?.route ?: tabNavigation.startDestination
+                val currentRoute = navBackStackEntry.value?.destination?.route
                 val tabs = remember { BottomTab.entries.toList() }
                 Scaffold(
                     bottomBar = { SetupBottomNavBar(currentRoute, tabs) }
                 ) { innerPadding ->
-                    tabNavigation.SetupTabNavigation(
+                    tabNavigation.SetupTabNavigationHost(
+                        modifier = Modifier.padding(innerPadding),
                         navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        navigationGraphBuilders = navigationGraphs
                     )
                 }
             }
@@ -82,7 +84,7 @@ internal class MainActivity : ComponentActivity() {
 
     @Composable
     private fun SetupBottomNavBar(
-        currentRoute: String,
+        currentRoute: String?,
         tabs: List<BottomTab>
     ) {
         BottomNavigationBar(
@@ -96,21 +98,11 @@ internal class MainActivity : ComponentActivity() {
     }
 
     private fun registerNavigationGraphBuilder() {
-        navigationGraphBuilders.forEach(lifecycle::addObserver)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        appMviViewModel.start(lifecycleScope)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        appMviViewModel.stop()
+        navigationGraphs.forEach(lifecycle::addObserver)
     }
 
     override fun onDestroy() {
-        navigationGraphBuilders.forEach(lifecycle::removeObserver)
+        navigationGraphs.forEach(lifecycle::removeObserver)
         super.onDestroy()
     }
 }

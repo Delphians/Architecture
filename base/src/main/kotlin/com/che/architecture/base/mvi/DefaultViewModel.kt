@@ -6,15 +6,12 @@ import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 
 class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val stateStore: StateStore<MviState>,
@@ -26,13 +23,7 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
 
     private lateinit var viewModelScope: CoroutineScope
 
-    override val event: SharedFlow<Event> by lazy {
-        eventsListener.event.shareIn(
-            scope = viewModelScope,
-            SharingStarted.Lazily,
-            0
-        )
-    }
+    override val event: Flow<Event> = eventsListener.event
 
     override val state: StateFlow<MviState> = stateStore.state
 
@@ -41,12 +32,8 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
         startProcessors()
     }
 
-    override fun stop() {
-        viewModelScope.cancel()
-    }
-
     override fun dispatchIntention(intention: Intention) {
-        intentionDispatcher.dispatchIntention(viewModelScope, intention)
+        intentionDispatcher.dispatchIntention(intention)
     }
 
     private fun startProcessors() {
