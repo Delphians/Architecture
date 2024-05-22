@@ -10,7 +10,9 @@ interface MviViewModel<MviState : Any, Intention : Any, Event : Any> {
 
     val state: StateFlow<MviState>
 
+    fun dispatchIntention(intention: Intention)
+
     fun start(scope: CoroutineScope)
 
-    fun dispatchIntention(intention: Intention)
+    fun stop()
 }

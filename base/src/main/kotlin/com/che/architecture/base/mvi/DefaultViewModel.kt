@@ -6,6 +6,7 @@ import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
@@ -30,6 +31,10 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     override fun start(scope: CoroutineScope) {
         viewModelScope = scope
         startProcessors()
+    }
+
+    override fun stop() {
+        viewModelScope.cancel()
     }
 
     override fun dispatchIntention(intention: Intention) {
