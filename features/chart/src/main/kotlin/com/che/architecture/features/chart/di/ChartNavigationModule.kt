@@ -1,6 +1,6 @@
 package com.che.architecture.features.chart.di
 
-import com.che.architecture.features.chart.navigation.ChartNavigationImpl
+import com.che.architecture.features.chart.navigation.ChartNavigation
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import dagger.Binds
 import dagger.Module
@@ -14,5 +14,5 @@ abstract class ChartNavigationModule {
 
     @IntoSet
     @Binds
-    internal abstract fun bindsChartNavigation(it: ChartNavigationImpl): NavigationGraphBuilder
+    internal abstract fun bindsChartNavigation(it: ChartNavigation): NavigationGraphBuilder
 }

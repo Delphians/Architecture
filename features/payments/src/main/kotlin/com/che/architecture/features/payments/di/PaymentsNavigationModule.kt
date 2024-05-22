@@ -1,6 +1,6 @@
 package com.che.architecture.features.payments.di
 
-import com.che.architecture.features.payments.navigation.PaymentsNavigationImpl
+import com.che.architecture.features.payments.navigation.PaymentsNavigation
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import dagger.Binds
 import dagger.Module
@@ -14,5 +14,5 @@ abstract class PaymentsNavigationModule {
 
     @IntoSet
     @Binds
-    internal abstract fun bindsPaymentsNavigation(it: PaymentsNavigationImpl): NavigationGraphBuilder
+    internal abstract fun bindsPaymentsNavigation(it: PaymentsNavigation): NavigationGraphBuilder
 }
