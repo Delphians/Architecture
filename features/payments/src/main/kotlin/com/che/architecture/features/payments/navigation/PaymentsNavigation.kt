@@ -26,20 +26,22 @@ import kotlinx.coroutines.flow.onEach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavHostController
+import com.che.architecture.features.shared.app.AppUiEvent
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import com.che.architecture.ui.compose.tabs.BottomTab
 import dagger.Reusable
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
 @Reusable
 internal class PaymentsNavigation @Inject constructor(
     private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>,
-    private val errorListener: EventsListener<ErrorEvent>
+    private val errorListener: EventsListener<ErrorEvent>,
+    private val appEventListener: EventsListener<AppUiEvent>
 ) : NavigationGraphBuilder {
 
     override val route: String = PAYMENTS_GRAPH_ROUTE
     private lateinit var navHostController: NavHostController
-    private var isEventStarted = false
 
     override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
@@ -47,12 +49,16 @@ internal class PaymentsNavigation @Inject constructor(
     }
 
     override fun onResume(owner: LifecycleOwner) {
-        viewModel.dispatchIntention(
-            PaymentsIntention.GetTickerPriceIntention(
-                Ticker(FakeStockData.fakeTicker.value),
-                FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
+        appEventListener.event.filter {
+            it is AppUiEvent.TabChanged && it.activeTab == BottomTab.PAYMENTS
+        }.onEach {
+            viewModel.dispatchIntention(
+                PaymentsIntention.GetTickerPriceIntention(
+                    Ticker(FakeStockData.fakeTicker.value),
+                    FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
+                )
             )
-        )
+        }.launchIn(viewModel.scope)
     }
 
     override fun setupGraph(
@@ -95,16 +101,12 @@ internal class PaymentsNavigation @Inject constructor(
     }
 
     private fun handleUiEvent() {
-        if (!isEventStarted) {
-            errorListener.event.onEach { errorEvent ->
-                errorEvent.cause?.let {
-                    viewModel.dispatchIntention(
-                        PaymentsIntention.FailureIntention(it)
-                    )
-                }
-            }.onStart {
-                isEventStarted = true
-            }.launchIn(viewModel.scope)
-        }
+        errorListener.event.onEach { errorEvent ->
+            errorEvent.cause?.let {
+                viewModel.dispatchIntention(
+                    PaymentsIntention.FailureIntention(it)
+                )
+            }
+        }.launchIn(viewModel.scope)
     }
 }

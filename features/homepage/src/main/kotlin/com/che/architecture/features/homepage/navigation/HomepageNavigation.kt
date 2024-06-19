@@ -21,7 +21,6 @@ import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import dagger.Reusable
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @Reusable
@@ -32,7 +31,6 @@ internal class HomepageNavigation @Inject constructor(
     override val route: String = HOMEPAGE_GRAPH_ROUTE
 
     private var navHostController: NavHostController? = null
-    private var isEventStarted = false
 
     override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
@@ -81,16 +79,12 @@ internal class HomepageNavigation @Inject constructor(
     }
 
     private fun handleUiEvent() {
-        if (!isEventStarted) {
-            viewModel.event.onEach {
-                when (it) {
-                    is HomepageUiEvent.NavigateToDetails -> navHostController?.navigate(
-                        "${HomeScreenDetails.destination}/${it.ticker.value}"
-                    )
-                }
-            }.onStart {
-                isEventStarted = true
-            }.launchIn(viewModel.scope)
-        }
+        viewModel.event.onEach {
+            when (it) {
+                is HomepageUiEvent.NavigateToDetails -> navHostController?.navigate(
+                    "${HomeScreenDetails.destination}/${it.ticker.value}"
+                )
+            }
+        }.launchIn(viewModel.scope)
     }
 }
