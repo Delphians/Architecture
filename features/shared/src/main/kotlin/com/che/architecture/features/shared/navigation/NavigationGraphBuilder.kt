@@ -6,7 +6,7 @@ import com.che.architecture.base.android.service.lifecycle.LifecycleAwareNavigat
 
 interface NavigationGraphBuilder : LifecycleAwareNavigation {
 
-    val startDestination: String
+    val route: String
 
     fun setupGraph(
         navGraphBuilder: NavGraphBuilder,

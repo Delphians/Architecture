@@ -2,7 +2,6 @@ package com.che.architecture.features.payments.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,8 +25,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import dagger.Reusable
+import kotlinx.coroutines.flow.onStart
 import javax.inject.Inject
 
 @Reusable
@@ -36,7 +37,15 @@ internal class PaymentsNavigation @Inject constructor(
     private val errorListener: EventsListener<ErrorEvent>
 ) : NavigationGraphBuilder {
 
-    override val startDestination: String = PaymentsGraph.PaymentsScreen.route
+    override val route: String = PAYMENTS_GRAPH_ROUTE
+    private lateinit var navHostController: NavHostController
+    private var isEventStarted = false
+
+    override fun onCreate(owner: LifecycleOwner) {
+        viewModel.start(owner.lifecycleScope)
+        handleUiEvent()
+    }
+
     override fun onResume(owner: LifecycleOwner) {
         viewModel.dispatchIntention(
             PaymentsIntention.GetTickerPriceIntention(
@@ -46,24 +55,20 @@ internal class PaymentsNavigation @Inject constructor(
         )
     }
 
-    override fun onCreate(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
-    }
-
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
         modifier: Modifier
     ) {
-        navGraphBuilder.composable(startDestination) {
+        navGraphBuilder.composable(route) {
 
-            val paymentsNavController = rememberNavController()
+            navHostController = rememberNavController()
 
             NavHost(
-                navController = paymentsNavController,
-                startDestination = startDestination
+                navController = navHostController,
+                startDestination = PaymentsGraph.PaymentsScreen.destination
             ) {
                 composable(
-                    route = startDestination
+                    route = PaymentsGraph.PaymentsScreen.destination
                 ) {
                     viewModel.state.collectAsState().value.let { state ->
                         when {
@@ -73,16 +78,6 @@ internal class PaymentsNavigation @Inject constructor(
                         }
                     }
                 }
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                errorListener.event.onEach { errorEvent ->
-                    errorEvent.cause?.let {
-                        viewModel.dispatchIntention(
-                            PaymentsIntention.FailureIntention(it)
-                        )
-                    }
-                }.launchIn(this)
             }
         }
     }
@@ -97,5 +92,19 @@ internal class PaymentsNavigation @Inject constructor(
                 viewModel.dispatchIntention(PaymentsIntention.EmptyIntention)
             }
         )
+    }
+
+    private fun handleUiEvent() {
+        if (!isEventStarted) {
+            errorListener.event.onEach { errorEvent ->
+                errorEvent.cause?.let {
+                    viewModel.dispatchIntention(
+                        PaymentsIntention.FailureIntention(it)
+                    )
+                }
+            }.onStart {
+                isEventStarted = true
+            }.launchIn(viewModel.scope)
+        }
     }
 }

@@ -22,19 +22,22 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val initialIntention: Intention? = null
 ) : MviViewModel<MviState, Intention, Event> {
 
-    private lateinit var viewModelScope: CoroutineScope
+    private lateinit var _viewModelScope: CoroutineScope
 
     override val event: Flow<Event> = eventsListener.event
 
     override val state: StateFlow<MviState> = stateStore.state
 
+    override val scope: CoroutineScope by lazy {
+        _viewModelScope
+    }
     override fun start(scope: CoroutineScope) {
-        viewModelScope = scope
+        _viewModelScope = scope
         startProcessors()
     }
 
     override fun stop() {
-        viewModelScope.cancel()
+        _viewModelScope.cancel()
     }
 
     override fun dispatchIntention(intention: Intention) {
@@ -53,6 +56,6 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
         }.merge()
             .onEach { result ->
                 stateStore.process(result)
-            }.launchIn(viewModelScope)
+            }.launchIn(_viewModelScope)
     }
 }
