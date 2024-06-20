@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -39,6 +38,8 @@ internal class MainActivity : ComponentActivity() {
     @Inject
     lateinit var navigationGraphs: Set<@JvmSuppressWildcards NavigationGraphBuilder>
 
+    private val tabs = BottomTab.entries.toList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,18 +49,17 @@ internal class MainActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
+            val navBackStackEntry = navController.currentBackStackEntryAsState()
+            val currentRoute =
+                navBackStackEntry.value?.destination?.route ?: tabNavigation.startDestination
 
             ArchitectureTheme {
-                val navBackStackEntry = navController.currentBackStackEntryAsState()
-                val currentRoute = navBackStackEntry.value?.destination?.route
-                val tabs = remember { BottomTab.entries.toList() }
                 Scaffold(
                     bottomBar = { SetupBottomNavBar(currentRoute, tabs) }
                 ) { innerPadding ->
-                    tabNavigation.SetupTabNavigationHost(
+                    tabNavigation.SetupTabNavigation(
                         modifier = Modifier.padding(innerPadding),
-                        navController = navController,
-                        navigationGraphBuilders = navigationGraphs
+                        navController = navController
                     )
                 }
             }
@@ -77,14 +77,14 @@ internal class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                }.launchIn(lifecycleScope)
+                }.launchIn(this)
             }
         }
     }
 
     @Composable
     private fun SetupBottomNavBar(
-        currentRoute: String?,
+        currentRoute: String,
         tabs: List<BottomTab>
     ) {
         BottomNavigationBar(
