@@ -2,7 +2,6 @@ package com.che.architecture.features.payments.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -26,48 +25,54 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavHostController
+import com.che.architecture.features.shared.app.AppUiEvent
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import com.che.architecture.ui.compose.tabs.BottomTab
 import dagger.Reusable
+import kotlinx.coroutines.flow.filter
 import javax.inject.Inject
 
 @Reusable
-internal class PaymentsNavigationImpl @Inject constructor(
+internal class PaymentsNavigation @Inject constructor(
     private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>,
-    private val errorListener: EventsListener<ErrorEvent>
+    private val errorListener: EventsListener<ErrorEvent>,
+    private val appEventListener: EventsListener<AppUiEvent>
 ) : NavigationGraphBuilder {
 
-    override val startDestination: String = PaymentsGraph.PaymentsScreen.route
-    override fun onResume(owner: LifecycleOwner) {
-        viewModel.dispatchIntention(
-            PaymentsIntention.GetTickerPriceIntention(
-                Ticker(FakeStockData.fakeTicker.value),
-                FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
-            )
-        )
-    }
+    override val route: String = PAYMENTS_GRAPH_ROUTE
+    private lateinit var navHostController: NavHostController
 
-    override fun onStart(owner: LifecycleOwner) {
+    override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
-    }
+        handleUiEvent()
 
-    override fun onStop(owner: LifecycleOwner) {
-        viewModel.stop()
+        appEventListener.event.filter {
+            it is AppUiEvent.TabChanged && it.activeTab == BottomTab.PAYMENTS
+        }.onEach {
+            viewModel.dispatchIntention(
+                PaymentsIntention.GetTickerPriceIntention(
+                    Ticker(FakeStockData.fakeTicker.value),
+                    FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
+                )
+            )
+        }.launchIn(viewModel.getScope())
     }
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
         modifier: Modifier
     ) {
-        navGraphBuilder.composable(startDestination) {
+        navGraphBuilder.composable(route) {
 
-            val paymentsNavController = rememberNavController()
+            navHostController = rememberNavController()
 
             NavHost(
-                navController = paymentsNavController,
-                startDestination = startDestination
+                navController = navHostController,
+                startDestination = PaymentsGraph.PaymentsScreen.destination
             ) {
                 composable(
-                    route = startDestination
+                    route = PaymentsGraph.PaymentsScreen.destination
                 ) {
                     viewModel.state.collectAsState().value.let { state ->
                         when {
@@ -77,16 +82,6 @@ internal class PaymentsNavigationImpl @Inject constructor(
                         }
                     }
                 }
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                errorListener.event.onEach { errorEvent ->
-                    errorEvent.cause?.let {
-                        viewModel.dispatchIntention(
-                            PaymentsIntention.FailureIntention(it)
-                        )
-                    }
-                }.launchIn(this)
             }
         }
     }
@@ -101,5 +96,15 @@ internal class PaymentsNavigationImpl @Inject constructor(
                 viewModel.dispatchIntention(PaymentsIntention.EmptyIntention)
             }
         )
+    }
+
+    private fun handleUiEvent() {
+        errorListener.event.onEach { errorEvent ->
+            errorEvent.cause?.let {
+                viewModel.dispatchIntention(
+                    PaymentsIntention.FailureIntention(it)
+                )
+            }
+        }.launchIn(viewModel.getScope())
     }
 }

@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -37,27 +36,30 @@ internal class MainActivity : ComponentActivity() {
     lateinit var appMviViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
 
     @Inject
-    lateinit var navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+    lateinit var navigationGraphs: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+
+    private val tabs = BottomTab.entries.toList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        appMviViewModel.start(lifecycleScope)
 
         registerNavigationGraphBuilder()
 
         setContent {
             val navController = rememberNavController()
+            val navBackStackEntry = navController.currentBackStackEntryAsState()
+            val currentRoute =
+                navBackStackEntry.value?.destination?.route ?: tabNavigation.startDestination
 
             ArchitectureTheme {
-                val navBackStackEntry = navController.currentBackStackEntryAsState()
-                val currentRoute =
-                    navBackStackEntry.value?.destination?.route ?: tabNavigation.startDestination
-                val tabs = remember { BottomTab.entries.toList() }
                 Scaffold(
                     bottomBar = { SetupBottomNavBar(currentRoute, tabs) }
                 ) { innerPadding ->
                     tabNavigation.SetupTabNavigation(
-                        navController = navController,
-                        modifier = Modifier.padding(innerPadding)
+                        modifier = Modifier.padding(innerPadding),
+                        navController = navController
                     )
                 }
             }
@@ -75,7 +77,7 @@ internal class MainActivity : ComponentActivity() {
                             }
                         }
                     }
-                }.launchIn(lifecycleScope)
+                }.launchIn(this)
             }
         }
     }
@@ -96,21 +98,11 @@ internal class MainActivity : ComponentActivity() {
     }
 
     private fun registerNavigationGraphBuilder() {
-        navigationGraphBuilders.forEach(lifecycle::addObserver)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        appMviViewModel.start(lifecycleScope)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        appMviViewModel.stop()
+        navigationGraphs.forEach(lifecycle::addObserver)
     }
 
     override fun onDestroy() {
-        navigationGraphBuilders.forEach(lifecycle::removeObserver)
+        navigationGraphs.forEach(lifecycle::removeObserver)
         super.onDestroy()
     }
 }

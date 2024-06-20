@@ -1,9 +1,7 @@
 package com.che.architecture.base.mvi
 
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class DefaultIntentionDispatcher<Intention : Any> @Inject constructor() :
@@ -14,10 +12,8 @@ class DefaultIntentionDispatcher<Intention : Any> @Inject constructor() :
         extraBufferCapacity = MAX_BUFFER_SIZE
     )
 
-    override fun dispatchIntention(scope: CoroutineScope, intention: Intention) {
-        scope.launch {
-            intentions.emit(intention)
-        }
+    override fun dispatchIntention(intention: Intention) {
+        intentions.tryEmit(intention)
     }
 
     companion object {

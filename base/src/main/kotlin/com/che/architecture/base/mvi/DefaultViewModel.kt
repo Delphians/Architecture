@@ -7,14 +7,12 @@ import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.shareIn
 
 class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val stateStore: StateStore<MviState>,
@@ -24,34 +22,37 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val initialIntention: Intention? = null
 ) : MviViewModel<MviState, Intention, Event> {
 
-    private lateinit var viewModelScope: CoroutineScope
+    private lateinit var _viewModelScope: CoroutineScope
 
-    override val event: SharedFlow<Event> by lazy {
-        eventsListener.event.shareIn(
-            scope = viewModelScope,
-            SharingStarted.Lazily,
-            0
-        )
-    }
+    override val event: Flow<Event> = eventsListener.event
 
     override val state: StateFlow<MviState> = stateStore.state
 
+    override fun getScope(): CoroutineScope = _viewModelScope
+
     override fun start(scope: CoroutineScope) {
-        viewModelScope = scope
+        intentionDispatcher.intentions.resetReplayCache()
+        eventsListener.resetCache()
+        _viewModelScope = scope
         startProcessors()
     }
 
     override fun stop() {
-        viewModelScope.cancel()
+        _viewModelScope.cancel()
     }
 
     override fun dispatchIntention(intention: Intention) {
-        intentionDispatcher.dispatchIntention(viewModelScope, intention)
+        intentionDispatcher.dispatchIntention(intention)
     }
 
     private fun startProcessors() {
         val intentionsFlow =
-            intentionDispatcher.intentions.onStart { initialIntention?.let { event -> emit(event) } }
+            intentionDispatcher.intentions
+                .onStart {
+                    if (stateStore.isInitialState()) {
+                        initialIntention?.let { event -> emit(event) }
+                    }
+                }
 
         intentionProcessors.flatMap { processor ->
             listOf(
@@ -61,6 +62,6 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
         }.merge()
             .onEach { result ->
                 stateStore.process(result)
-            }.launchIn(viewModelScope)
+            }.launchIn(_viewModelScope)
     }
 }

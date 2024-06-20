@@ -13,10 +13,10 @@ import com.che.architecture.features.payments.mvi.PaymentsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
+import dagger.hilt.android.components.ActivityRetainedComponent
 
 @Module(includes = [PaymentsProcessorsModule::class])
-@InstallIn(ActivityComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 abstract class PaymentsModule {
 
     @Binds

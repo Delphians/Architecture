@@ -3,6 +3,7 @@ package com.che.architecture.base.mvi
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -52,17 +53,18 @@ internal class DefaultViewModelTest {
             state.onEach {
                 assertEquals(-1, it.finalCount)
             }.launchIn(scope)
-            stop()
+            scope.cancel()
         }
     }
 
     @Test
     fun `Plus intention should dispatch Plus event`() = runTest {
+        val scope = CoroutineScope(Dispatchers.Unconfined)
         testSubject.apply {
-            start(CoroutineScope(Dispatchers.Unconfined))
+            start(scope)
             dispatchIntention(TestIntention.PlusIntention(1))
             assertEquals(TestEvent.Plus(1), event.first())
-            stop()
+            scope.cancel()
         }
     }
 }

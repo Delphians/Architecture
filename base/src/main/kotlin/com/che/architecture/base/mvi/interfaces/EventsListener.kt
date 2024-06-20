@@ -4,4 +4,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface EventsListener<Event> {
     val event: Flow<Event>
+    fun resetCache()
 }

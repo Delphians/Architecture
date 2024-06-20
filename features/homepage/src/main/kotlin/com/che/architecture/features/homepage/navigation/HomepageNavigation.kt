@@ -1,6 +1,5 @@
 package com.che.architecture.features.homepage.navigation
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -15,53 +14,48 @@ import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
 import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreenDetails
+import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreenDetails
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import dagger.Reusable
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @Reusable
-internal class HomepageNavigationImpl @Inject constructor(
+internal class HomepageNavigation @Inject constructor(
     private val viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
 ) : NavigationGraphBuilder {
 
-    override val startDestination: String = HomepageGraph.HomeScreen.route
+    override val route: String = HOMEPAGE_GRAPH_ROUTE
 
-    override fun onStart(owner: LifecycleOwner) {
+    private var navHostController: NavHostController? = null
+
+    override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
-    }
-
-    override fun onStop(owner: LifecycleOwner) {
-        viewModel.stop()
+        handleUiEvent()
     }
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
         modifier: Modifier
     ) {
-        navGraphBuilder.composable(startDestination) {
-            val homeNavController = rememberNavController()
-
-            NavHost(
-                navController = homeNavController,
-                startDestination = startDestination
-            ) {
-                handleScreenDetails()
-                handleHomeScreenDetails()
-            }
-
-            LaunchedEffect(key1 = Unit) {
-                handleUiEvent(homeNavController)
+        navGraphBuilder.composable(route) {
+            navHostController = rememberNavController().apply {
+                NavHost(
+                    navController = this,
+                    startDestination = HomeScreen.destination
+                ) {
+                    handleHomeScreen()
+                    handleHomeScreenDetails()
+                }
             }
         }
     }
 
-    private fun NavGraphBuilder.handleScreenDetails() {
-        composable(startDestination) {
+    private fun NavGraphBuilder.handleHomeScreen() {
+        composable(HomeScreen.destination) {
             HomeScreen {
                 viewModel.dispatchIntention(
                     HomepageIntention.OpenScreenDetails(it)
@@ -72,7 +66,7 @@ internal class HomepageNavigationImpl @Inject constructor(
 
     private fun NavGraphBuilder.handleHomeScreenDetails() {
         composable(
-            route = HomeScreenDetails.screenRouteWithArgs,
+            route = HomeScreenDetails.destinationWithArgs,
             arguments = HomeScreenDetails.homeScreenDetailsArgs.args,
             deepLinks = HomeScreenDetails.deepLinks
         ) {
@@ -84,13 +78,13 @@ internal class HomepageNavigationImpl @Inject constructor(
         }
     }
 
-    private fun CoroutineScope.handleUiEvent(controller: NavHostController) {
+    private fun handleUiEvent() {
         viewModel.event.onEach {
             when (it) {
-                is HomepageUiEvent.NavigateToDetails -> controller.navigate(
-                    "${HomeScreenDetails.route}/${it.ticker.value}"
+                is HomepageUiEvent.NavigateToDetails -> navHostController?.navigate(
+                    "${HomeScreenDetails.destination}/${it.ticker.value}"
                 )
             }
-        }.launchIn(this)
+        }.launchIn(viewModel.getScope())
     }
 }

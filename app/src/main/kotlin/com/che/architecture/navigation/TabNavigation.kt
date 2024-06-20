@@ -38,8 +38,8 @@ internal class TabNavigation @Inject constructor(
     internal fun bindWithRoute(tab: BottomTab): String {
         var destination: String? = null
         navigationGraphBuilders.forEach {
-            if (tab.name.equals(it.startDestination, ignoreCase = true)) {
-                destination = it.startDestination
+            if (tab.name.equals(it.route, ignoreCase = true)) {
+                destination = it.route
             }
         }
         return destination ?: bindWithRoute(BottomTab.HOME)
