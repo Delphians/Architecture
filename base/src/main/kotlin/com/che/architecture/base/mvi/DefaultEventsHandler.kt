@@ -23,6 +23,10 @@ class DefaultEventsHandler<Event : Any> @Inject constructor() :
         return _event.tryEmit(event)
     }
 
+    override fun resetCache() {
+        _event.resetReplayCache()
+    }
+
     private companion object {
         private const val EXTRA_BUFFER_SIZE = 15
     }

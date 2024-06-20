@@ -85,6 +85,6 @@ internal class HomepageNavigation @Inject constructor(
                     "${HomeScreenDetails.destination}/${it.ticker.value}"
                 )
             }
-        }.launchIn(viewModel.scope)
+        }.launchIn(viewModel.getScope())
     }
 }

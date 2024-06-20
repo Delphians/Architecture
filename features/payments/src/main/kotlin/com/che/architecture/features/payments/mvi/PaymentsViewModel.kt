@@ -6,8 +6,10 @@ import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
+import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
+@ActivityRetainedScoped
 internal class PaymentsViewModel @Inject constructor(
     private val mviStateStoreFactory: DefaultStateStoreFactory<PaymentsState>,
     private val eventsListener: EventsListener<PaymentsUiEvent>,

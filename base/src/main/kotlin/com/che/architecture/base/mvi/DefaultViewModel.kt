@@ -28,10 +28,11 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
 
     override val state: StateFlow<MviState> = stateStore.state
 
-    override val scope: CoroutineScope by lazy {
-        _viewModelScope
-    }
+    override fun getScope(): CoroutineScope = _viewModelScope
+
     override fun start(scope: CoroutineScope) {
+        intentionDispatcher.intentions.resetReplayCache()
+        eventsListener.resetCache()
         _viewModelScope = scope
         startProcessors()
     }
@@ -46,7 +47,12 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
 
     private fun startProcessors() {
         val intentionsFlow =
-            intentionDispatcher.intentions.onStart { initialIntention?.let { event -> emit(event) } }
+            intentionDispatcher.intentions
+                .onStart {
+                    if (stateStore.isInitialState()) {
+                        initialIntention?.let { event -> emit(event) }
+                    }
+                }
 
         intentionProcessors.flatMap { processor ->
             listOf(

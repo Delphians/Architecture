@@ -16,7 +16,7 @@ interface DefaultStateStoreFactory<State : Any> {
 }
 
 class DefaultStateStore<State : Any> @AssistedInject constructor(
-    @Assisted initialState: State
+    @Assisted private val initialState: State
 ) : StateStore<State> {
 
     private val _state = MutableStateFlow(initialState)
@@ -25,4 +25,6 @@ class DefaultStateStore<State : Any> @AssistedInject constructor(
     override suspend fun process(mviResult: MviResult<State>) {
         _state.emit(mviResult.reduce(state.value))
     }
+
+    override fun isInitialState(): Boolean = initialState == state.value
 }

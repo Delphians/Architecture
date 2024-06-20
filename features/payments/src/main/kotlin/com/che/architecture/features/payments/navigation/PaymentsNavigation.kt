@@ -46,9 +46,7 @@ internal class PaymentsNavigation @Inject constructor(
     override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
         handleUiEvent()
-    }
 
-    override fun onResume(owner: LifecycleOwner) {
         appEventListener.event.filter {
             it is AppUiEvent.TabChanged && it.activeTab == BottomTab.PAYMENTS
         }.onEach {
@@ -58,7 +56,7 @@ internal class PaymentsNavigation @Inject constructor(
                     FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
                 )
             )
-        }.launchIn(viewModel.scope)
+        }.launchIn(viewModel.getScope())
     }
 
     override fun setupGraph(
@@ -107,6 +105,6 @@ internal class PaymentsNavigation @Inject constructor(
                     PaymentsIntention.FailureIntention(it)
                 )
             }
-        }.launchIn(viewModel.scope)
+        }.launchIn(viewModel.getScope())
     }
 }

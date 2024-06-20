@@ -24,7 +24,12 @@ internal fun Project.configureForAllProjects() {
     }
 
     tasks.withType<KotlinJvmCompile>().configureEach {
-        kotlinOptions.jvmTarget = AndroidSdk.javaVersion.toString()
+        kotlinOptions.apply {
+            jvmTarget = AndroidSdk.javaVersion.toString()
+            freeCompilerArgs = listOf(
+                "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            )
+        }
     }
 
     tasks.withType<Test> {
