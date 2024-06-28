@@ -28,7 +28,7 @@ internal fun Project.configureDetektPlugin() {
         config.setFrom(files("${project.rootDir}/detekt.yml"))
         reports {
             html.outputLocation.set(
-                file("${project.buildDir}/reports/detekt/${project.name}.html")
+                file("${project.layout.buildDirectory.get()}/reports/detekt/${project.name}.html")
             )
         }
     }
