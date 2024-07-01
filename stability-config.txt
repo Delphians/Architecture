@@ -8,3 +8,7 @@ com.che.architecture.base.mvi.interfaces.MviResult
 com.che.architecture.base.mvi.DefaultStateStoreFactory
 
 kotlin.collections.*
+kotlin.Throwable
+
+androidx.navigation.NavDeepLink
+androidx.navigation.NamedNavArgument
