@@ -4,6 +4,7 @@ import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.features.chart.mvi.ChartIntention
 import com.che.architecture.features.chart.mvi.EmptyResults
 import com.che.architecture.features.chart.mvi.SetPointsResults
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -25,7 +26,7 @@ internal class InitialIntentionProcessorTest {
     @Test
     fun `When send InitialIntention without points should get EmptyResults`() = runTest {
         val result = testSubject.process(
-            flowOf(ChartIntention.InitialIntention(emptyList()))
+            flowOf(ChartIntention.InitialIntention(persistentListOf()))
         ).first()
 
         assertTrue(EmptyResults::class == result::class)

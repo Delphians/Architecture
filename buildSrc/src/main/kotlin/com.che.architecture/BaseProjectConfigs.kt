@@ -29,6 +29,22 @@ internal fun Project.configureForAllProjects() {
             freeCompilerArgs = listOf(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
             )
+            freeCompilerArgs += listOf(
+                "-P",
+                "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=$rootDir/stability-config.txt"
+            )
+            if (project.findProperty("composeCompilerReports") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_compiler_report"
+                )
+            }
+            if (project.findProperty("composeCompilerMetrics") == "true") {
+                freeCompilerArgs += listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.layout.buildDirectory.get()}/compose_metrics_report"
+                )
+            }
         }
     }
 

@@ -12,6 +12,7 @@ import com.che.architecture.features.payments.mvi.EmptyResults
 import com.che.architecture.features.payments.mvi.LoadingResults
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -32,7 +33,7 @@ internal class GetTickerPriceIntentionProcessor @Inject constructor(
 
                 // To get the fake data
                 val prices = FakeStockData
-                    .fakePricesGenerator(fakeStartDate..fakeEndDate)
+                    .fakePricesGenerator(fakeStartDate..fakeEndDate).toPersistentList()
 
                 // To get the real data from Tiingo
                 // val prices = dailyTickerPrices(it.ticker, it.dateRange)

@@ -23,7 +23,8 @@ dependencies {
         project(":baseAndroid"),
         project(":features:shared"),
         project(":ui:compose"),
-        project(":domain")
+        project(":domain"),
+        Libraries.Kotlinx.immutableCollections
     )
 
     useDagger()

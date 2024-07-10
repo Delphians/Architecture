@@ -14,9 +14,10 @@ plugins {
 dependencies {
     add(
         configurationName = ConfigurationName.IMPLEMENTATION,
+        project(":base"),
         Libraries.Kotlinx.serialization,
         Libraries.Coroutines.core,
-        project(":base")
+        Libraries.Kotlinx.immutableCollections
     )
 
     useDagger(isAndroidModule = false)
