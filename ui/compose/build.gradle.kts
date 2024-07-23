@@ -7,6 +7,7 @@ plugins {
     id("architecture-plugin")
     id("com.android.library")
     id("kotlin-android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
