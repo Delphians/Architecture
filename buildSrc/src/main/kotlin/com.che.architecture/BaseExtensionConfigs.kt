@@ -10,9 +10,6 @@ internal fun BaseExtension.configureCommonSdkOptions(project: Project) {
     // Enable view binding for all.
     buildFeatures.viewBinding = true
 
-    //Compose
-    configureCompose()
-
     defaultConfig {
         minSdk = AndroidSdk.minSdk
         targetSdk = AndroidSdk.targetSdk
