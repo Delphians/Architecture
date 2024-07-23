@@ -5,6 +5,7 @@ import com.che.architecture.utils.ConfigurationName
 import com.che.architecture.utils.add
 import com.che.architecture.utils.useCompose
 import com.che.architecture.utils.useDagger
+import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 plugins {
     id("architecture-plugin")
@@ -13,6 +14,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.owasp.dependencycheck") version "7.1.2"
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -51,6 +53,10 @@ android {
                             it.name.contains("RuntimeOnly")
                     )
         }.map { it.name }
+    }
+
+    composeCompiler {
+        featureFlags.add(ComposeFeatureFlag.StrongSkipping)
     }
 }
 

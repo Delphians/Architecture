@@ -2,8 +2,10 @@ package com.che.architecture.ui.compose.tabs
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import com.che.architecture.ui.compose.R
 
+@Immutable
 enum class BottomTab(
     @StringRes
     val title: Int,

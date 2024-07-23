@@ -1,5 +1,6 @@
 package com.che.architecture.features.payments.mvi
 
+import androidx.compose.runtime.Immutable
 import com.che.architecture.base.mvi.DefaultStateStoreFactory
 import com.che.architecture.base.mvi.DefaultViewModel
 import com.che.architecture.base.mvi.interfaces.EventsListener
@@ -10,6 +11,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped
 import javax.inject.Inject
 
 @ActivityRetainedScoped
+@Immutable
 internal class PaymentsViewModel @Inject constructor(
     private val mviStateStoreFactory: DefaultStateStoreFactory<PaymentsState>,
     private val eventsListener: EventsListener<PaymentsUiEvent>,

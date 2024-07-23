@@ -31,6 +31,7 @@ object Versions {
     object Kotlinx {
         const val coroutines = "1.8.0"
         const val serialization = "1.6.3"
+        const val collection = "0.3.7"
     }
 }
 
@@ -63,6 +64,9 @@ object Libraries {
     object Kotlinx {
         const val serialization =
             "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.Kotlinx.serialization}"
+
+        const val immutableCollections =
+            "org.jetbrains.kotlinx:kotlinx-collections-immutable:${Versions.Kotlinx.collection}"
     }
 
     object Hilt {

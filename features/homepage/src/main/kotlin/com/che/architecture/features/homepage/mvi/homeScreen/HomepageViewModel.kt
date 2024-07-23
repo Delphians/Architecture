@@ -1,5 +1,6 @@
 package com.che.architecture.features.homepage.mvi.homeScreen
 
+import androidx.compose.runtime.Immutable
 import com.che.architecture.base.mvi.DefaultStateStoreFactory
 import com.che.architecture.base.mvi.DefaultViewModel
 import com.che.architecture.base.mvi.interfaces.EventsListener
@@ -8,6 +9,7 @@ import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import javax.inject.Inject
 
+@Immutable
 internal class HomepageViewModel @Inject constructor(
     private val mviStateStoreFactory: DefaultStateStoreFactory<HomepageState>,
     private val eventsListener: EventsListener<HomepageUiEvent>,

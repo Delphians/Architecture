@@ -10,6 +10,7 @@ plugins {
     id("com.android.library")
     id("kotlin-android")
     id("kotlin-kapt")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
@@ -23,7 +24,8 @@ dependencies {
         project(":ui:compose"),
         project(":base"),
         project(":baseAndroid"),
-        project(":domain")
+        project(":domain"),
+        Libraries.Kotlinx.immutableCollections
     )
     useDagger()
     useCompose(isFullPackage = true, isNavigation = true)

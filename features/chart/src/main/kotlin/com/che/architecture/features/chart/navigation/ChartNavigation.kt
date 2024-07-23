@@ -6,7 +6,6 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -28,7 +27,6 @@ internal class ChartNavigation @Inject constructor(
 ) : NavigationGraphBuilder {
 
     override val route: String = CHART_GRAPH_ROUTE
-    private lateinit var navHostController: NavHostController
 
     override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
@@ -39,7 +37,7 @@ internal class ChartNavigation @Inject constructor(
         modifier: Modifier
     ) {
         navGraphBuilder.composable(route) {
-            navHostController = rememberNavController()
+            val navHostController = rememberNavController()
             val state = viewModel.state.collectAsState().value
 
             NavHost(

@@ -2,13 +2,14 @@ package com.che.architecture.domain.fakes
 
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
+import kotlinx.collections.immutable.persistentListOf
 import java.time.LocalDate
 import kotlin.random.Random
 
 @SuppressWarnings("MagicNumber")
 object FakeStockData {
 
-    val fakeClosePricePoints = listOf(10.0, 30.0, 50.0, 20.0, 60.0, 40.0, 30.0)
+    val fakeClosePricePoints = persistentListOf(10.0, 30.0, 50.0, 20.0, 60.0, 40.0, 30.0)
     val fakeStartDate: LocalDate = LocalDate.of(2012, 1, 1)
     val fakeEndDate: LocalDate = LocalDate.of(2013, 1, 2)
     val fakeTicker = Ticker("GOOG")
@@ -17,7 +18,7 @@ object FakeStockData {
     val dateRange: ClosedRange<LocalDate> =
         LocalDate.of(2012, 1, 3)..LocalDate.of(2012, 1, 4)
 
-    const val FAKE_DELAY: Long = 1000
+    const val FAKE_DELAY: Long = 2000
     private const val FAKE_ZERO = 0.0
 
     fun fakePricesGenerator(rangeOfDates: ClosedRange<LocalDate>): List<Price> {

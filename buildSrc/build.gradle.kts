@@ -15,6 +15,7 @@ dependencies {
     implementation(plugins.getValue("kotlinGradlePlugin"))
     implementation(plugins.getValue("androidGradlePlugin"))
     implementation(plugins.getValue("detektGradlePlugin"))
+    implementation(plugins.getValue("composeCompilerPlugin"))
     implementation(libs.getValue("javapoet"))
 }
 

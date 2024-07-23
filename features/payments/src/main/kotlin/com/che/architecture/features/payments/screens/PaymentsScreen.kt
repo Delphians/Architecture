@@ -27,6 +27,7 @@ import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.ui.compose.foundation.ArchitectureTheme
 import com.che.architecture.ui.compose.foundation.dimension.LocalPadding
+import kotlinx.collections.immutable.toPersistentList
 import java.text.DecimalFormat
 
 @Composable
@@ -105,7 +106,7 @@ private fun PaymentsScreenPreview() {
                 paymentsState = PaymentsState(
                     FakeStockData.fakePricesGenerator(
                         FakeStockData.dateRange
-                    )
+                    ).toPersistentList()
                 )
             )
         }

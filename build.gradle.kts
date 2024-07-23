@@ -11,6 +11,7 @@ buildscript {
     dependencies {
         classpath(plugins.getValue("androidGradlePlugin"))
         classpath(plugins.getValue("kotlinGradlePlugin"))
+        classpath(plugins.getValue("composeCompilerPlugin"))
         classpath(kotlin("serialization", version = versions.getValue("kotlin")))
         classpath(com.che.architecture.Libraries.Hilt.gradlePlugin)
     }

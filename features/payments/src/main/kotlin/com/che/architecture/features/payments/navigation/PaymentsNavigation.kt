@@ -25,7 +25,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavHostController
 import com.che.architecture.features.shared.app.AppUiEvent
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.tabs.BottomTab
@@ -41,7 +40,6 @@ internal class PaymentsNavigation @Inject constructor(
 ) : NavigationGraphBuilder {
 
     override val route: String = PAYMENTS_GRAPH_ROUTE
-    private lateinit var navHostController: NavHostController
 
     override fun onCreate(owner: LifecycleOwner) {
         viewModel.start(owner.lifecycleScope)
@@ -65,7 +63,7 @@ internal class PaymentsNavigation @Inject constructor(
     ) {
         navGraphBuilder.composable(route) {
 
-            navHostController = rememberNavController()
+            val navHostController = rememberNavController()
 
             NavHost(
                 navController = navHostController,

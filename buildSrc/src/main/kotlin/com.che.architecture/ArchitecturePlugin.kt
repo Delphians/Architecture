@@ -47,5 +47,5 @@ internal object AndroidSdk {
     const val targetSdk = 34
     const val compileSdk = 34
     const val buildTools = "$compileSdk.0.0"
-    val javaVersion = JavaVersion.VERSION_17
+    val javaVersion = JavaVersion.VERSION_19
 }

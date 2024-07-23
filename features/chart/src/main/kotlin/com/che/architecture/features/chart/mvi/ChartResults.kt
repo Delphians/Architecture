@@ -1,9 +1,11 @@
 package com.che.architecture.features.chart.mvi
 
 import com.che.architecture.base.mvi.interfaces.MviResult
+import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.persistentListOf
 
 internal data class SetPointsResults(
-    private val points: List<Double>
+    private val points: PersistentList<Double>
 ) : MviResult<ChartState> {
     override fun reduce(state: ChartState): ChartState =
         state.copy(
@@ -15,7 +17,7 @@ internal data class SetPointsResults(
 internal data object EmptyResults : MviResult<ChartState> {
     override fun reduce(state: ChartState): ChartState =
         state.copy(
-            points = emptyList(),
+            points = persistentListOf(),
             isLoading = false
         )
 }
