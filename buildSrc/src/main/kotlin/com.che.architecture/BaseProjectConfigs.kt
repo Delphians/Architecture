@@ -24,23 +24,23 @@ internal fun Project.configureForAllProjects() {
     }
 
     tasks.withType<KotlinJvmCompile>().configureEach {
-        kotlinOptions.apply {
-            jvmTarget = AndroidSdk.javaVersion.toString()
-            freeCompilerArgs = listOf(
+        compilerOptions.apply {
+            jvmTarget.set(AndroidSdk.jvmTarget)
+            freeCompilerArgs.add(
                 "-opt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
             )
-            freeCompilerArgs += listOf(
+            freeCompilerArgs.addAll(
                 "-P",
                 "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=$rootDir/stability-config.txt"
             )
             if (project.findProperty("composeCompilerReports") == "true") {
-                freeCompilerArgs += listOf(
+                freeCompilerArgs.addAll(
                     "-P",
                     "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_compiler_report"
                 )
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
-                freeCompilerArgs += listOf(
+                freeCompilerArgs.addAll(
                     "-P",
                     "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.layout.buildDirectory.get()}/compose_metrics_report"
                 )
