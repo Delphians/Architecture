@@ -5,6 +5,7 @@ import com.android.build.gradle.LibraryPlugin
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.internal.Kapt3GradleSubplugin
 
 /**
@@ -48,4 +49,5 @@ internal object AndroidSdk {
     const val compileSdk = 34
     const val buildTools = "$compileSdk.0.0"
     val javaVersion = JavaVersion.VERSION_19
+    val jvmTarget = JvmTarget.JVM_19
 }
