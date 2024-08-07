@@ -3,20 +3,24 @@ package com.che.architecture.domain.fakes
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
 import kotlinx.collections.immutable.persistentListOf
-import java.time.LocalDate
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import kotlin.random.Random
 
 @SuppressWarnings("MagicNumber")
 object FakeStockData {
 
+    const val FAKE_TIINGO_URL = "api.tiingo.com/tiingo"
+    const val FAKE_TOKEN = "ASD123FG"
     val fakeClosePricePoints = persistentListOf(10.0, 30.0, 50.0, 20.0, 60.0, 40.0, 30.0)
-    val fakeStartDate: LocalDate = LocalDate.of(2012, 1, 1)
-    val fakeEndDate: LocalDate = LocalDate.of(2013, 1, 2)
+    val fakeStartDate: LocalDate = LocalDate(2012, 1, 1)
+    val fakeEndDate: LocalDate = LocalDate(2013, 1, 2)
     val fakeTicker = Ticker("GOOG")
 
     // Take the dateRange from Price.json file
     val dateRange: ClosedRange<LocalDate> =
-        LocalDate.of(2012, 1, 3)..LocalDate.of(2012, 1, 4)
+        LocalDate(2012, 1, 3)..LocalDate(2012, 1, 4)
 
     const val FAKE_DELAY: Long = 2000
     private const val FAKE_ZERO = 0.0
@@ -45,7 +49,7 @@ object FakeStockData {
                     splitFactor = FAKE_ZERO
                 )
             )
-            startDate = startDate.plusDays(1)
+            startDate = startDate.plus(1, DateTimeUnit.DAY)
         }
 
         return prices
@@ -57,7 +61,7 @@ object FakeStockData {
 
         while (startDate in range) {
             count++
-            startDate = startDate.plusDays(1)
+            startDate = startDate.plus(1, DateTimeUnit.DAY)
         }
 
         return count

@@ -63,7 +63,8 @@ android {
 dependencies {
     add(
         configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":data"),
+        project(":data:common"),
+        project(":data:remoteDatasource"),
         project(":domain"),
         project(":base"),
         project(":baseAndroid"),

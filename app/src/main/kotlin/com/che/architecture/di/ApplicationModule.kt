@@ -1,11 +1,12 @@
 package com.che.architecture.di
 
 import com.che.architecture.BuildConfig
-import com.che.architecture.data.di.KtorModule
-import com.che.architecture.data.di.RepositoriesModule
-import com.che.architecture.data.remote.tiingo.ProvidedNames
+import com.che.architecture.data.remote.datasource.ProvidedNames
+import com.che.architecture.data.remote.datasource.di.KtorModule
 import com.che.architecture.domain.di.ErrorDomainModule
 import com.che.architecture.domain.di.UseCaseModule
+import com.che.architecture.data.common.di.RepositoriesModule
+import com.che.architecture.data.remote.datasource.di.RemoteDataSourceModule
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,6 +17,7 @@ import javax.inject.Named
     includes = [
         KtorModule::class,
         RepositoriesModule::class,
+        RemoteDataSourceModule::class,
         UseCaseModule::class,
         ErrorDomainModule::class
     ]

@@ -32,6 +32,7 @@ object Versions {
         const val coroutines = "1.8.0"
         const val serialization = "1.6.3"
         const val collection = "0.3.7"
+        const val dateTime = "0.6.0"
     }
 }
 
@@ -67,6 +68,8 @@ object Libraries {
 
         const val immutableCollections =
             "org.jetbrains.kotlinx:kotlinx-collections-immutable:${Versions.Kotlinx.collection}"
+
+        const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.dateTime}"
     }
 
     object Hilt {
