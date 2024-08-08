@@ -2,7 +2,7 @@ package com.che.architecture.domain.repositories
 
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 interface StockPricesRepository {
     suspend fun getDailyTickerPrices(

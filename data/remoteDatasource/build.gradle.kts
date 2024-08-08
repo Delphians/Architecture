@@ -8,17 +8,19 @@ plugins {
     id("architecture-plugin")
     id("kotlin")
     id("kotlin-kapt")
-    id("kotlinx-serialization")
 }
 
 dependencies {
     add(
         configurationName = ConfigurationName.IMPLEMENTATION,
+        project(":domain"),
         project(":base"),
-        Libraries.Kotlinx.serialization,
-        Libraries.Coroutines.core,
-        Libraries.Kotlinx.immutableCollections,
-        Libraries.Kotlinx.dateTime
+        Libraries.KtorClient.core,
+        Libraries.KtorClient.cio,
+        Libraries.KtorClient.serialization,
+        Libraries.KtorClient.content_negotiation,
+        Libraries.Kotlinx.dateTime,
+        Libraries.KtorClient.ktorMockClient
     )
 
     useDagger(isAndroidModule = false)
@@ -26,6 +28,8 @@ dependencies {
     add(
         configurationName = ConfigurationName.TEST_IMPLEMENTATION,
         Libraries.Coroutines.test,
+
+        "ch.qos.logback:logback-classic:1.2.9"
     )
 
     useJUnitPlatform()
