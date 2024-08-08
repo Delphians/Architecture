@@ -2,7 +2,6 @@ package com.che.architecture.features.homepage.navigation
 
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -10,31 +9,41 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.domain.model.Ticker
+import com.che.architecture.features.homepage.di.HomepageModule.getViewModel
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
-import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreenDetails
 import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreen
+import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreenDetails
 import com.che.architecture.features.homepage.screens.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreenDetails
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
-import dagger.Reusable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-@Reusable
-internal class HomepageNavigation @Inject constructor(
-    private val viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
-) : NavigationGraphBuilder {
+internal class HomepageNavigation : NavigationGraphBuilder {
 
     override val route: String = HOMEPAGE_GRAPH_ROUTE
 
     private var navHostController: NavHostController? = null
 
-    override fun onCreate(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
+    private lateinit var viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
+
+    private lateinit var coroutineScope: CoroutineScope
+
+    override fun onStart(owner: LifecycleOwner) {
+        coroutineScope = CoroutineScope(Dispatchers.Default)
+        viewModel = getViewModel().also {
+            it.start(coroutineScope)
+        }
         handleUiEvent()
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        coroutineScope.cancel()
     }
 
     override fun setupGraph(
