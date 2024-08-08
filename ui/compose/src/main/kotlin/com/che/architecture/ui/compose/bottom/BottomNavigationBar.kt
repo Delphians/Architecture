@@ -13,7 +13,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.che.architecture.ui.compose.tabs.BottomTab
-import java.util.Locale
 
 @Composable
 @NonRestartableComposable
@@ -34,7 +33,7 @@ fun BottomNavigationBar(
                     )
                 },
                 label = {
-                    Text(text = stringResource(id = tab.title).uppercase(Locale.getDefault()))
+                    Text(text = stringResource(id = tab.title))
                 },
                 selected = currentTab == tab,
                 onClick = { onClick(tab) },
