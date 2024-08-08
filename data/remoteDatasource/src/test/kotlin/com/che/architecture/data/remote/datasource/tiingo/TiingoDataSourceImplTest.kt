@@ -1,8 +1,9 @@
 package com.che.architecture.data.remote.datasource.tiingo
 
-import com.che.architecture.data.remote.datasource.fakes.FakeData
+import com.che.architecture.data.remote.datasource.fakes.createMockEngine
 import com.che.architecture.data.remote.datasource.fakes.createMockHttpClient
 import com.che.architecture.data.remote.datasource.fakes.mockTiingoBuilder
+import com.che.architecture.data.remote.datasource.fakes.PRICE_RESPONSE_STRING
 import com.che.architecture.domain.model.Failure
 import com.che.architecture.domain.model.Success
 import com.che.architecture.domain.fakes.FakeStockData
@@ -19,7 +20,7 @@ internal class TiingoDataSourceImplTest {
 
     private val testSubject = TiingoDataSourceImpl(
         tiingoUrlBuilder = mockTiingoBuilder(),
-        ktorClient = createMockHttpClient(FakeData.engine)
+        ktorClient = createMockHttpClient(createMockEngine(PRICE_RESPONSE_STRING))
     )
 
     @Test

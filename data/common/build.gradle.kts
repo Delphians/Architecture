@@ -16,6 +16,7 @@ dependencies {
         project(":domain"),
         project(":base"),
         project(":data:remoteDatasource"),
+        Libraries.Kotlinx.serialization,
         Libraries.Kotlinx.dateTime
     )
 

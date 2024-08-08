@@ -10,7 +10,7 @@ import io.ktor.http.headersOf
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-internal fun createMockEngine(result: ByteArray) = MockEngine { request ->
+internal fun createMockEngine(result: String) = MockEngine { request ->
     respond(
         content = result,
         status = HttpStatusCode.OK,

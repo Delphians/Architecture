@@ -19,7 +19,7 @@ class FakesTiingoDataSource : TiingoDataSource {
         dateRange: ClosedRange<LocalDate>
     ): Result<List<Price>, Throwable> {
         return if (ticker.value.isNotBlank() && dateRange.start < dateRange.endInclusive) {
-            createMockHttpClient(FakeData.engine).getSafeQuery<List<Price>>(
+            createMockHttpClient(createMockEngine(PRICE_RESPONSE_STRING)).getSafeQuery<List<Price>>(
                 mockTiingoBuilder().apply {
                     addPathParams(DAILY, ticker.value, PRICES)
                     addQueryParams(
