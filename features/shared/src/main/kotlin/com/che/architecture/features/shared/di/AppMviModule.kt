@@ -2,40 +2,44 @@ package com.che.architecture.features.shared.di
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.DefaultIntentionDispatcher
+import com.che.architecture.base.mvi.DefaultStateStore
+import com.che.architecture.base.mvi.DefaultViewModel
 import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
+import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
+import com.che.architecture.base.mvi.interfaces.StateStore
 import com.che.architecture.features.shared.app.AppIntentions
 import com.che.architecture.features.shared.app.AppMviState
-import com.che.architecture.features.shared.app.AppMviViewModel
 import com.che.architecture.features.shared.app.AppUiEvent
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import com.che.architecture.features.shared.app.processor.TabChangedIntentionProcessor
 
-@Module(includes = [AppMviProcessorsModule::class])
-@InstallIn(ActivityRetainedComponent::class)
-abstract class AppMviModule {
+object AppModule {
 
-    @Binds
-    internal abstract fun bindsMviViewModel(
-        it: AppMviViewModel
-    ): MviViewModel<AppMviState, AppIntentions, AppUiEvent>
+    fun getAppViewModel(): MviViewModel<AppMviState, AppIntentions, AppUiEvent> =
+        DefaultViewModel(
+            stateStore = getStateStore(),
+            eventsListener = getEvenListener(),
+            intentionProcessors = getProcessor(),
+            intentionDispatcher = getIntentionDispatcher(),
+            initialIntention = AppIntentions.InitialIntention
+        )
 
-    @Binds
-    internal abstract fun bindsEventListener(
-        handler: DefaultEventsHandler<AppUiEvent>
-    ): EventsListener<AppUiEvent>
+    private val eventHandler = DefaultEventsHandler<AppUiEvent>()
 
-    @Binds
-    internal abstract fun bindsEventDispatcher(
-        handler: DefaultEventsHandler<AppUiEvent>
-    ): EventsDispatcher<AppUiEvent>
+    private fun getEventDispatcher(): EventsDispatcher<AppUiEvent> =
+        eventHandler
 
-    @Binds
-    internal abstract fun bindsIntentionDispatcher(
-        dispatcher: DefaultIntentionDispatcher<AppIntentions>
-    ): IntentionDispatcher<AppIntentions>
+    private fun getEvenListener(): EventsListener<AppUiEvent> =
+        eventHandler
+
+    private fun getIntentionDispatcher(): IntentionDispatcher<AppIntentions> =
+        DefaultIntentionDispatcher()
+
+    private fun getStateStore(): StateStore<AppMviState> =
+        DefaultStateStore(AppMviState())
+
+    private fun getProcessor(): Set<IntentionProcessor<AppMviState, AppIntentions>> =
+        setOf(TabChangedIntentionProcessor(getEventDispatcher()))
 }
