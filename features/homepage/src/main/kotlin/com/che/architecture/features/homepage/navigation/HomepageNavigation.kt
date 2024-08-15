@@ -2,6 +2,7 @@ package com.che.architecture.features.homepage.navigation
 
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -32,18 +33,16 @@ internal class HomepageNavigation : NavigationGraphBuilder {
 
     private lateinit var viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
 
-    private lateinit var coroutineScope: CoroutineScope
-
     override fun onStart(owner: LifecycleOwner) {
-        coroutineScope = CoroutineScope(Dispatchers.Default)
+        viewModel.start(owner.lifecycleScope)
         viewModel = getViewModel().also {
-            it.start(coroutineScope)
+            it.start(viewModel.getScope())
         }
         handleUiEvent()
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        coroutineScope.cancel()
+        viewModel.stop()
     }
 
     override fun setupGraph(

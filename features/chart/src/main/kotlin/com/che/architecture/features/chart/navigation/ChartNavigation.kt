@@ -4,6 +4,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,12 +29,10 @@ internal class ChartNavigation : NavigationGraphBuilder {
 
     private lateinit var viewModel: MviViewModel<ChartState, ChartIntention, ChartUiEvent>
 
-    private lateinit var coroutineScope: CoroutineScope
-
     override fun onStart(owner: LifecycleOwner) {
-        coroutineScope = CoroutineScope(Dispatchers.Default)
+        viewModel.start(owner.lifecycleScope)
         viewModel = getViewModel().also {
-            it.start(coroutineScope)
+            it.start(viewModel.getScope())
         }
     }
 
@@ -44,7 +43,7 @@ internal class ChartNavigation : NavigationGraphBuilder {
     }
 
     override fun onStop(owner: LifecycleOwner) {
-        coroutineScope.cancel()
+        viewModel.stop()
     }
 
     override fun setupGraph(
