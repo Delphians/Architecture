@@ -2,40 +2,53 @@ package com.che.architecture.features.payments.di
 
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.DefaultIntentionDispatcher
+import com.che.architecture.base.mvi.DefaultStateStore
+import com.che.architecture.base.mvi.DefaultViewModel
 import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
+import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
+import com.che.architecture.base.mvi.interfaces.StateStore
+import com.che.architecture.domain.di.UseCaseModule
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
-import com.che.architecture.features.payments.mvi.PaymentsViewModel
-import dagger.Binds
-import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
+import com.che.architecture.features.payments.mvi.processor.EmptyIntentionProcessor
+import com.che.architecture.features.payments.mvi.processor.FailureIntentionProcessor
+import com.che.architecture.features.payments.mvi.processor.GetTickerPriceIntentionProcessor
 
-@Module(includes = [PaymentsProcessorsModule::class])
-@InstallIn(ActivityRetainedComponent::class)
-abstract class PaymentsModule {
+internal object PaymentsModule {
 
-    @Binds
-    internal abstract fun bindsMviViewModel(
-        it: PaymentsViewModel
-    ): MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>
+    private val getTickerPriceIntentionProcessor: GetTickerPriceIntentionProcessor =
+        GetTickerPriceIntentionProcessor(UseCaseModule.provideDailyTickerPrices())
 
-    @Binds
-    internal abstract fun bindsEventListener(
-        handler: DefaultEventsHandler<PaymentsUiEvent>
-    ): EventsListener<PaymentsUiEvent>
+    internal fun getViewModel(): MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent> =
+        DefaultViewModel(
+            stateStore = getStateStore(),
+            eventsListener = getEventListener(),
+            intentionProcessors = getProcessor(),
+            intentionDispatcher = getIntentionDispatcher()
+        )
 
-    @Binds
-    internal abstract fun bindsEventDispatcher(
-        handler: DefaultEventsHandler<PaymentsUiEvent>
-    ): EventsDispatcher<PaymentsUiEvent>
+    private val eventHandler = DefaultEventsHandler<PaymentsUiEvent>()
 
-    @Binds
-    internal abstract fun bindsIntentionDispatcher(
-        dispatcher: DefaultIntentionDispatcher<PaymentsIntention>
-    ): IntentionDispatcher<PaymentsIntention>
+    private fun getEventListener(): EventsListener<PaymentsUiEvent> =
+        eventHandler
+
+    private fun getEventDispatcher(): EventsDispatcher<PaymentsUiEvent> =
+        eventHandler
+
+    private fun getStateStore(): StateStore<PaymentsState> =
+        DefaultStateStore(PaymentsState())
+
+    private fun getIntentionDispatcher(): IntentionDispatcher<PaymentsIntention> =
+        DefaultIntentionDispatcher()
+
+    private fun getProcessor(): Set<IntentionProcessor<PaymentsState, PaymentsIntention>> =
+        setOf(
+            getTickerPriceIntentionProcessor,
+            FailureIntentionProcessor(),
+            EmptyIntentionProcessor()
+        )
 }

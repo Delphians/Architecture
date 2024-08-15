@@ -8,9 +8,8 @@ import com.che.architecture.features.payments.mvi.PaymentsState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-internal class FailureIntentionProcessor @Inject constructor() :
+internal class FailureIntentionProcessor :
     IntentionProcessor<PaymentsState, PaymentsIntention> {
 
     override fun process(intentions: Flow<PaymentsIntention>): Flow<MviResult<PaymentsState>> =

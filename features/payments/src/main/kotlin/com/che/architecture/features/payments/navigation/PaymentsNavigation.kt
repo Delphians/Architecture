@@ -25,36 +25,42 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
-import com.che.architecture.features.shared.app.AppUiEvent
+import com.che.architecture.features.payments.di.PaymentsModule.getViewModel
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
-import com.che.architecture.ui.compose.tabs.BottomTab
-import dagger.Reusable
-import kotlinx.coroutines.flow.filter
-import javax.inject.Inject
 
-@Reusable
-internal class PaymentsNavigation @Inject constructor(
-    private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>,
-    private val errorListener: EventsListener<ErrorEvent>,
-    private val appEventListener: EventsListener<AppUiEvent>
+internal class PaymentsNavigation(
+    private val errorListener: EventsListener<ErrorEvent>
 ) : NavigationGraphBuilder {
 
     override val route: String = PAYMENTS_GRAPH_ROUTE
 
-    override fun onCreate(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
-        handleUiEvent()
+    private lateinit var viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>
 
-        appEventListener.event.filter {
-            it is AppUiEvent.TabChanged && it.activeTab == BottomTab.PAYMENTS
-        }.onEach {
-            viewModel.dispatchIntention(
-                PaymentsIntention.GetTickerPriceIntention(
-                    Ticker(FakeStockData.fakeTicker.value),
-                    FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
-                )
+    override fun onStart(owner: LifecycleOwner) {
+        viewModel.start(owner.lifecycleScope)
+        viewModel = getViewModel().also {
+            it.start(viewModel.getScope())
+        }
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        viewModel.dispatchIntention(
+            PaymentsIntention.GetTickerPriceIntention(
+                Ticker(FakeStockData.fakeTicker.value),
+                FakeStockData.fakeStartDate..FakeStockData.fakeEndDate
             )
+        )
+        errorListener.event.onEach { errorEvent ->
+            errorEvent.cause?.let {
+                viewModel.dispatchIntention(
+                    PaymentsIntention.FailureIntention(it)
+                )
+            }
         }.launchIn(viewModel.getScope())
+    }
+
+    override fun onStop(owner: LifecycleOwner) {
+        viewModel.stop()
     }
 
     override fun setupGraph(
@@ -94,15 +100,5 @@ internal class PaymentsNavigation @Inject constructor(
                 viewModel.dispatchIntention(PaymentsIntention.EmptyIntention)
             }
         )
-    }
-
-    private fun handleUiEvent() {
-        errorListener.event.onEach { errorEvent ->
-            errorEvent.cause?.let {
-                viewModel.dispatchIntention(
-                    PaymentsIntention.FailureIntention(it)
-                )
-            }
-        }.launchIn(viewModel.getScope())
     }
 }

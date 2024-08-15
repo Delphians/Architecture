@@ -17,10 +17,9 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.transform
-import javax.inject.Inject
 
 @SuppressWarnings("UnusedPrivateProperty")
-internal class GetTickerPriceIntentionProcessor @Inject constructor(
+internal class GetTickerPriceIntentionProcessor(
     private val dailyTickerPrices: DailyTickerPrices
 ) : IntentionProcessor<PaymentsState, PaymentsIntention> {
 
