@@ -19,9 +19,6 @@ import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScree
 import com.che.architecture.features.homepage.screens.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreenDetails
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 

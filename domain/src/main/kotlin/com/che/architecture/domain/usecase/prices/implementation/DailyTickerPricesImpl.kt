@@ -7,9 +7,8 @@ import com.che.architecture.domain.usecase.prices.DailyTickerPrices
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
 
-internal class DailyTickerPricesImpl @Inject constructor(
+internal class DailyTickerPricesImpl(
     private val stockPricesRepository: StockPricesRepository
 ) : DailyTickerPrices {
 

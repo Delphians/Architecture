@@ -10,9 +10,8 @@ import com.che.architecture.features.shared.app.AppUiEvent
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-internal class TabChangedIntentionProcessor @Inject constructor(
+internal class TabChangedIntentionProcessor(
     private val eventsDispatcher: EventsDispatcher<AppUiEvent>
 ) : IntentionProcessor<AppMviState, AppIntentions> {
 

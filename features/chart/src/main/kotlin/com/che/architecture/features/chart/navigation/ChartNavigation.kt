@@ -19,9 +19,6 @@ import com.che.architecture.features.chart.navigation.ChartGraph.ChartRouteScree
 import com.che.architecture.features.chart.screens.ChartScreen
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.molecules.WarningScreen
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
 
 internal class ChartNavigation : NavigationGraphBuilder {
 
