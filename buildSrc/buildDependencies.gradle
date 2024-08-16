@@ -1,8 +1,7 @@
 rootProject.ext.versions = [
         agp     : '8.3.0',
         kotlin  : '2.0.20-Beta2',
-        detekt  : '1.23.6',
-        javapoet: "1.13.0"
+        detekt  : '1.23.6'
 ]
 
 rootProject.ext.plugins = [
@@ -10,9 +9,5 @@ rootProject.ext.plugins = [
         kotlinGradlePlugin : "org.jetbrains.kotlin:kotlin-gradle-plugin:${versions.kotlin}",
         detektGradlePlugin : "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:${versions.detekt}",
         composeCompilerPlugin: "org.jetbrains.kotlin:compose-compiler-gradle-plugin:${versions.kotlin}"
-]
-
-rootProject.ext.libs = [
-        javapoet: "com.squareup:javapoet:${versions.javapoet}"
 ]
 
