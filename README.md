@@ -1,7 +1,7 @@
 Hello, Friends!   
 
 # Tech stack of the base project:   
-    `Clean Architecture, Single Activity, MVI, Hilt/Dagger, Coroutines, 
+    `Clean Architecture, Single Activity, MVI, Coroutines, 
      Jetpack Compose, Material3, Atomic design, Ktor, JUnit, Mockk`
 
 # The structure of the project:

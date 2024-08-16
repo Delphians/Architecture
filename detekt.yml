@@ -534,7 +534,7 @@ style:
     active: true
     ignoreOverridableFunction: true
     excludedFunctions: [ 'describeContents' ]
-    ignoreAnnotated: [ 'dagger.Provides' ]
+    ignoreAnnotated: [ ]
   LoopWithTooManyJumpStatements:
     active: true
     maxJumpCount: 1
@@ -604,7 +604,7 @@ style:
     acceptableLength: 5
   UnnecessaryAbstractClass:
     active: true
-    ignoreAnnotated: [ 'dagger.Module' ]
+    ignoreAnnotated: [ ]
   UnnecessaryAnnotationUseSiteTarget:
     active: false
   UnnecessaryApply:
@@ -651,4 +651,4 @@ style:
   WildcardImport:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
-    excludeImports: [ 'java.util.*', 'kotlinx.android.synthetic.*' ]
+    excludeImports: [ 'kotlinx.android.synthetic.*' ]
