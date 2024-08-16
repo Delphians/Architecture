@@ -1,30 +1,25 @@
 package com.che.architecture.data.remote.datasource.di
 
-import com.che.architecture.data.remote.datasource.RemoteClient.KTOR_CLIENT
-import dagger.Module
-import dagger.Provides
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Module
-object KtorModule {
+internal object KtorModule {
 
-    @Singleton
-    @Provides
-    @Named(KTOR_CLIENT)
-    internal fun provideKtorClient() = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            json(
-                Json {
-                    prettyPrint = true
-                    isLenient = true
-                }
-            )
+    private val ktorClient by lazy {
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                json(
+                    Json {
+                        prettyPrint = true
+                        isLenient = true
+                    }
+                )
+            }
         }
     }
+
+    fun provideKtorClient() = ktorClient
 }

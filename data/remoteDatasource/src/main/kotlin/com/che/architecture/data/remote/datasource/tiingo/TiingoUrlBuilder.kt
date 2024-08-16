@@ -1,20 +1,15 @@
 package com.che.architecture.data.remote.datasource.tiingo
 
-import com.che.architecture.data.remote.datasource.ProvidedNames.TIINGO_BASE_URL
 import com.che.architecture.data.remote.datasource.ProvidedNames.TIINGO_FORMAT
 import com.che.architecture.data.remote.datasource.ProvidedNames.TIINGO_TOKEN
 import com.che.architecture.data.remote.datasource.TiingoPathParams.Format.JSON
 import io.ktor.http.URLBuilder
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Singleton
-internal class TiingoUrlBuilder @Inject constructor(
-    @Named(TIINGO_BASE_URL) private val tiingoBaseUrl: String,
-    @Named(TIINGO_TOKEN) private val tiingoToken: String
+internal class TiingoUrlBuilder(
+    private val tiingoBaseUrl: String,
+    private val tiingoToken: String
 ) {
 
     private val url = URLBuilder().apply {

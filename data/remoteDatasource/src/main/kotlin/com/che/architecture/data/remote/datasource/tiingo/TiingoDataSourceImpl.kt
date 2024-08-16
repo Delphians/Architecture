@@ -1,6 +1,5 @@
 package com.che.architecture.data.remote.datasource.tiingo
 
-import com.che.architecture.data.remote.datasource.RemoteClient.KTOR_CLIENT
 import com.che.architecture.data.remote.datasource.TiingoPathParams.DateTime.DAILY
 import com.che.architecture.data.remote.datasource.TiingoPathParams.DateTime.END_DATE
 import com.che.architecture.data.remote.datasource.TiingoPathParams.DateTime.START_DATE
@@ -12,14 +11,10 @@ import com.che.architecture.domain.model.Result
 import com.che.architecture.domain.model.Ticker
 import io.ktor.client.HttpClient
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
-import javax.inject.Named
-import javax.inject.Singleton
 
-@Singleton
-internal class TiingoDataSourceImpl @Inject constructor(
+internal class TiingoDataSourceImpl(
     private val tiingoUrlBuilder: TiingoUrlBuilder,
-    @Named(KTOR_CLIENT) private val ktorClient: HttpClient
+    private val ktorClient: HttpClient
 ) : TiingoDataSource {
 
     override suspend fun getDailyTickerPriceData(
