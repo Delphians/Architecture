@@ -31,9 +31,8 @@ internal class HomepageNavigation : NavigationGraphBuilder {
     private lateinit var viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
 
     override fun onStart(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
-        viewModel = getViewModel().also {
-            it.start(viewModel.getScope())
+        viewModel = getViewModel().apply {
+            start(owner.lifecycleScope)
         }
         handleUiEvent()
     }
