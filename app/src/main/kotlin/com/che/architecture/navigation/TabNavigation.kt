@@ -6,11 +6,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.ui.compose.tabs.BottomTab
-import dagger.hilt.android.scopes.ActivityScoped
-import javax.inject.Inject
 
-@ActivityScoped
-internal class TabNavigation @Inject constructor(
+internal class TabNavigation(
     private val navigationGraphBuilders: Set<@JvmSuppressWildcards NavigationGraphBuilder>
 ) {
 

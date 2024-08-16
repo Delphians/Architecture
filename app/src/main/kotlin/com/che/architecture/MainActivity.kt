@@ -8,42 +8,47 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.che.architecture.base.mvi.interfaces.MviViewModel
+import com.che.architecture.features.chart.di.ChartNavigationModule
+import com.che.architecture.features.homepage.di.HomepageNavigationModule
+import com.che.architecture.features.payments.di.PaymentsNavigationModule
 import com.che.architecture.features.shared.app.AppIntentions
 import com.che.architecture.features.shared.app.AppMviState
 import com.che.architecture.features.shared.app.AppUiEvent
+import com.che.architecture.features.shared.di.AppModule
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.navigation.TabNavigation
 import com.che.architecture.ui.compose.bottom.BottomNavigationBar
 import com.che.architecture.ui.compose.foundation.ArchitectureTheme
 import com.che.architecture.ui.compose.tabs.BottomTab
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import javax.inject.Inject
 
-@AndroidEntryPoint
 internal class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var tabNavigation: TabNavigation
+    private lateinit var tabNavigation: TabNavigation
 
-    @Inject
-    lateinit var appMviViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
+    private lateinit var appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
 
-    @Inject
-    lateinit var navigationGraphs: Set<@JvmSuppressWildcards NavigationGraphBuilder>
+    private val navigationGraphs: Set<NavigationGraphBuilder> by lazy {
+        setOf(
+            HomepageNavigationModule.getHomepageNavigation(),
+            PaymentsNavigationModule.getPaymentsNavigation(),
+            ChartNavigationModule.getChartNavigation(),
+        )
+    }
 
     private val tabs = BottomTab.entries.toList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        appMviViewModel.start(lifecycleScope)
+        tabNavigation = TabNavigation(navigationGraphs)
+
+        appViewModel = AppModule.getAppViewModel()
 
         registerNavigationGraphBuilder()
 
@@ -65,7 +70,7 @@ internal class MainActivity : ComponentActivity() {
             }
 
             LaunchedEffect(Unit) {
-                appMviViewModel.event.onEach {
+                appViewModel.event.onEach {
                     when (it) {
                         is AppUiEvent.TabChanged -> {
                             navController.navigate(tabNavigation.bindWithRoute(it.activeTab)) {
@@ -91,7 +96,7 @@ internal class MainActivity : ComponentActivity() {
             currentTab = tabNavigation.routeBindWithTab(currentRoute),
             tabs = tabs
         ) {
-            appMviViewModel.dispatchIntention(
+            appViewModel.dispatchIntention(
                 AppIntentions.TabChangedIntention(it)
             )
         }

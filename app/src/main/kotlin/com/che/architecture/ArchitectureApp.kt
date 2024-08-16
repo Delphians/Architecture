@@ -1,7 +1,11 @@
 package com.che.architecture
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.che.architecture.di.ApplicationModule
 
-@HiltAndroidApp
-internal class ArchitectureApp : Application()
+internal class ArchitectureApp : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        ApplicationModule.buildPaymentsModule()
+    }
+}

@@ -4,13 +4,11 @@ import com.che.architecture.handleProductFlavour
 import com.che.architecture.utils.ConfigurationName
 import com.che.architecture.utils.add
 import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
 import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
 
 plugins {
     id("architecture-plugin")
     id("com.android.application")
-    id("dagger.hilt.android.plugin")
     id("kotlin-android")
     id("kotlin-kapt")
     id("org.owasp.dependencycheck") version "7.1.2"
@@ -77,6 +75,5 @@ dependencies {
         Libraries.Androidx.Compose.activityCompose
     )
 
-    useDagger()
     useCompose(true, true)
 }
