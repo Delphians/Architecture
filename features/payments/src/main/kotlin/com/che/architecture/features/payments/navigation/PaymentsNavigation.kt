@@ -37,9 +37,8 @@ internal class PaymentsNavigation(
     private lateinit var viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>
 
     override fun onStart(owner: LifecycleOwner) {
-        viewModel.start(owner.lifecycleScope)
-        viewModel = getViewModel().also {
-            it.start(viewModel.getScope())
+        viewModel = getViewModel().apply {
+            start(owner.lifecycleScope)
         }
     }
 
