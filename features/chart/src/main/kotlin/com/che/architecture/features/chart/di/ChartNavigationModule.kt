@@ -3,6 +3,6 @@ package com.che.architecture.features.chart.di
 import com.che.architecture.features.chart.navigation.ChartNavigation
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 
-internal object ChartNavigationModule {
+object ChartNavigationModule {
     fun getChartNavigation(): NavigationGraphBuilder = ChartNavigation()
 }
