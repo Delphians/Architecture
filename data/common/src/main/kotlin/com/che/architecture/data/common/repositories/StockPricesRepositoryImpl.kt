@@ -8,11 +8,8 @@ import com.che.architecture.domain.model.Ticker
 import com.che.architecture.domain.model.mapBoth
 import com.che.architecture.domain.repositories.StockPricesRepository
 import kotlinx.datetime.LocalDate
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-internal class StockPricesRepositoryImpl @Inject constructor(
+internal class StockPricesRepositoryImpl(
     private val errorDispatcher: EventsDispatcher<ErrorEvent>,
     private val tiingoDataSource: TiingoDataSource
 ) : StockPricesRepository {
