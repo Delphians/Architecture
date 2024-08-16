@@ -2,13 +2,10 @@ package com.che.architecture.base.mvi
 
 import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
-import dagger.Reusable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import javax.inject.Inject
 
-@Reusable
-class DefaultEventsHandler<Event : Any> @Inject constructor() :
+class DefaultEventsHandler<Event : Any> :
     EventsListener<Event>,
     EventsDispatcher<Event> {
 

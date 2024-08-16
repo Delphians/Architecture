@@ -2,7 +2,6 @@ import com.che.architecture.Libraries
 import com.che.architecture.utils.ConfigurationName
 import com.che.architecture.utils.add
 import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
 import com.che.architecture.utils.useJUnitPlatform
 
 plugins {
@@ -17,7 +16,6 @@ dependencies {
         Libraries.Coroutines.core
     )
 
-    useDagger(false)
     useCompose()
 
     add(

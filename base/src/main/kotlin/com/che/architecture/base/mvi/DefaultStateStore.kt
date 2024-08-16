@@ -2,21 +2,17 @@ package com.che.architecture.base.mvi
 
 import com.che.architecture.base.mvi.interfaces.MviResult
 import com.che.architecture.base.mvi.interfaces.StateStore
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-@AssistedFactory
 interface DefaultStateStoreFactory<State : Any> {
     fun create(
         initialState: State
     ): DefaultStateStore<State>
 }
 
-class DefaultStateStore<State : Any> @AssistedInject constructor(
-    @Assisted private val initialState: State
+class DefaultStateStore<State : Any>(
+    private val initialState: State
 ) : StateStore<State> {
 
     private val _state = MutableStateFlow(initialState)
