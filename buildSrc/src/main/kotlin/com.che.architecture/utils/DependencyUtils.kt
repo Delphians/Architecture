@@ -23,23 +23,6 @@ fun DependencyHandler.add(
     }
 }
 
-fun DependencyHandler.useDagger(
-    isAndroidModule: Boolean = true,
-) {
-    add(ConfigurationName.KAPT, Libraries.Hilt.compiler)
-
-    if (!isAndroidModule) {
-        add(ConfigurationName.IMPLEMENTATION, Libraries.Hilt.core)
-    }
-
-    if (isAndroidModule) {
-        add(ConfigurationName.IMPLEMENTATION, Libraries.Hilt.android)
-        add(ConfigurationName.IMPLEMENTATION, Libraries.Hilt.compose)
-        add(ConfigurationName.KAPT_ANDROID_TEST, Libraries.Hilt.compiler)
-        add(ConfigurationName.ANDROID_TEST_IMPLEMENTATION, Libraries.Hilt.testing)
-    }
-}
-
 fun DependencyHandler.useCompose(
     isFullPackage: Boolean = false,
     isNavigation: Boolean = false

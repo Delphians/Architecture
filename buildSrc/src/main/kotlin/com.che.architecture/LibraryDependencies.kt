@@ -3,8 +3,6 @@ package com.che.architecture
 object Versions {
     const val appVersion = "1.0.0"
 
-    const val dagger = "2.51"
-    const val hiltCompose = "1.2.0"
     const val desugaring = "1.1.5"
     const val detekt = "1.23.5"
     const val junitPlatform = "5.10.2"
@@ -70,16 +68,6 @@ object Libraries {
             "org.jetbrains.kotlinx:kotlinx-collections-immutable:${Versions.Kotlinx.collection}"
 
         const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.Kotlinx.dateTime}"
-    }
-
-    object Hilt {
-        const val gradlePlugin =
-            "com.google.dagger:hilt-android-gradle-plugin:${Versions.dagger}"
-        const val core = "com.google.dagger:hilt-core:${Versions.dagger}"
-        const val android = "com.google.dagger:hilt-android:${Versions.dagger}"
-        const val compiler = "com.google.dagger:hilt-android-compiler:${Versions.dagger}"
-        const val testing = "com.google.dagger:hilt-android-testing:${Versions.dagger}"
-        const val compose = "androidx.hilt:hilt-navigation-compose:${Versions.hiltCompose}"
     }
 
     object Coroutines {
