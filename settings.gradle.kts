@@ -6,7 +6,6 @@ dependencyResolutionManagement {
     }
 }
 
-include(":app")
 include(":base")
 include(":baseAndroid")
 include(":domain")
@@ -18,3 +17,4 @@ include(":ui:compose")
 include(":shared")
 include(":data:common")
 include(":data:remoteDatasource")
+include(":androidApp")
