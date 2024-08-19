@@ -1,6 +1,5 @@
 package com.che.architecture.features.chart.navigation
 
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.LifecycleOwner
@@ -63,11 +62,9 @@ internal class ChartNavigation : NavigationGraphBuilder {
                 }
             }
 
-            LaunchedEffect(key1 = Unit) {
-                viewModel.dispatchIntention(
-                    ChartIntention.InitialIntention(FakeStockData.fakeClosePricePoints)
-                )
-            }
+            viewModel.dispatchIntention(
+                ChartIntention.InitialIntention(FakeStockData.fakeClosePricePoints)
+            )
         }
     }
 }

@@ -6,9 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.che.architecture.base.mvi.interfaces.MviViewModel
@@ -31,6 +32,8 @@ internal class MainActivity : ComponentActivity() {
 
     private lateinit var tabNavigation: TabNavigation
 
+    private lateinit var navController: NavHostController
+
     private lateinit var appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
 
     private val navigationGraphs: Set<NavigationGraphBuilder> by lazy {
@@ -48,12 +51,16 @@ internal class MainActivity : ComponentActivity() {
 
         tabNavigation = TabNavigation(navigationGraphs)
 
-        appViewModel = AppModule.getAppViewModel()
+        appViewModel = AppModule.getAppViewModel().apply {
+            start(lifecycleScope)
+        }
 
         registerNavigationGraphBuilder()
 
         setContent {
-            val navController = rememberNavController()
+
+            navController = rememberNavController()
+
             val navBackStackEntry = navController.currentBackStackEntryAsState()
             val currentRoute =
                 navBackStackEntry.value?.destination?.route ?: tabNavigation.startDestination
@@ -68,23 +75,21 @@ internal class MainActivity : ComponentActivity() {
                     )
                 }
             }
-
-            LaunchedEffect(Unit) {
-                appViewModel.event.onEach {
-                    when (it) {
-                        is AppUiEvent.TabChanged -> {
-                            navController.navigate(tabNavigation.bindWithRoute(it.activeTab)) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
-                            }
-                        }
-                    }
-                }.launchIn(this)
-            }
         }
+
+        appViewModel.event.onEach {
+            when (it) {
+                is AppUiEvent.TabChanged -> {
+                    navController.navigate(tabNavigation.bindWithRoute(it.activeTab)) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
+            }
+        }.launchIn(lifecycleScope)
     }
 
     @Composable
