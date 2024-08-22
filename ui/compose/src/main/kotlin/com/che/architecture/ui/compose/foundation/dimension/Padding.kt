@@ -1,12 +1,13 @@
 package com.che.architecture.ui.compose.foundation.dimension
 
 import androidx.compose.runtime.Immutable
-import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.che.architecture.ui.compose.foundation.common.Dimension
 
-val LocalPadding = compositionLocalOf { Padding() }
+
+val LocalPadding = staticCompositionLocalOf { Padding() }
 
 @Immutable
 data class Padding(
