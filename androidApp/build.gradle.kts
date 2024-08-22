@@ -26,7 +26,7 @@ android {
 
     buildFeatures { buildConfig = true }
 
-    handleProductFlavour()
+    // handleProductFlavour()
 
     dependencyCheck {
         failBuildOnCVSS = 0F
