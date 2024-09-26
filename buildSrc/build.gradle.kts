@@ -1,7 +1,3 @@
-apply(from = "buildDependencies.gradle")
-val plugins: Map<Any, Any> by extra
-val libs: Map<Any,Any> by extra
-
 plugins {
     `kotlin-dsl`
 }
@@ -10,11 +6,8 @@ repositories {
     google()
     mavenCentral()
 }
-
 dependencies {
-    implementation(plugins.getValue("kotlinGradlePlugin"))
-    implementation(plugins.getValue("androidGradlePlugin"))
-    implementation(plugins.getValue("detektGradlePlugin"))
-    implementation(plugins.getValue("composeCompilerPlugin"))
+    implementation("com.android.tools.build:gradle:8.4.0")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.20")
 }
 
