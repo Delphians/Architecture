@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.onStart
 class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
     private val stateStore: StateStore<MviState>,
     private val eventsListener: EventsListener<Event>,
-    private val intentionProcessors: Set<@JvmSuppressWildcards IntentionProcessor<MviState, Intention>>,
+    private val intentionProcessors: Set<IntentionProcessor<MviState, Intention>>,
     private val intentionDispatcher: IntentionDispatcher<Intention>,
     private val initialIntention: Intention? = null
 ) : MviViewModel<MviState, Intention, Event> {
@@ -65,3 +65,4 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
             }.launchIn(_viewModelScope)
     }
 }
+
