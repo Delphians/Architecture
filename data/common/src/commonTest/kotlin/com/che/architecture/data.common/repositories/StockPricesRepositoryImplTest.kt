@@ -8,8 +8,8 @@ import com.che.architecture.domain.model.ErrorEvent
 import com.che.architecture.domain.model.Ticker
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class StockPricesRepositoryImplTest {
 
