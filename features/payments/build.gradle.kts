@@ -1,40 +1,45 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.configAndroidLibrary
+import com.che.architecture.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
+    kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+}
+
+kotlin {
+    configureMultiplatform("features.payments")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.base)
+            implementation(projects.domain)
+            implementation(projects.atomicDesign)
+            implementation(projects.features.shared)
+            implementation(projects.data.common)
+            implementation(libs.coroutines.core)
+            implementation(libs.compose.navigation)
+            implementation(libs.androidx.lifecycle.compose)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.immutable.collections)
+            implementation(libs.datetime)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
 
 android {
     namespace = "com.che.architecture.features.payments"
-}
-
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":features:shared"),
-        project(":ui:compose"),
-        project(":base"),
-        project(":baseAndroid"),
-        project(":domain"),
-        Libraries.Kotlinx.immutableCollections,
-        Libraries.Kotlinx.dateTime
-    )
-    useCompose(isFullPackage = true, isNavigation = true)
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test,
-        Libraries.Mockk.mockk,
-        Libraries.Mockk.mockkAndroid
-    )
-
-    useJUnitPlatform()
+    configAndroidLibrary()
+    buildFeatures {
+        compose = true
+    }
 }

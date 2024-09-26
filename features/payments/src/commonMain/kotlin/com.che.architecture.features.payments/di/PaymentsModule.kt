@@ -10,7 +10,9 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
-import com.che.architecture.domain.usecase.prices.DailyTickerPrices
+import com.che.architecture.data.common.di.RepositoriesModule
+import com.che.architecture.domain.di.UseCaseModule
+import com.che.architecture.domain.prices.DailyTickerPrices
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
@@ -25,7 +27,14 @@ object PaymentsModule {
     fun paymentsModuleInjection(
         dailyTickerPrices: DailyTickerPrices
     ) {
-        getTickerPriceIntentionProcessor = GetTickerPriceIntentionProcessor(dailyTickerPrices)
+        getTickerPriceIntentionProcessor = GetTickerPriceIntentionProcessor(
+            UseCaseModule.provideDailyTickerPrices(
+                RepositoriesModule.provideStockPricesRepository(
+                    """api.tiingo.com/tiingo/""",
+                    ""
+                )
+            )
+        )
     }
 
     internal fun getViewModel(): MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent> =
@@ -52,7 +61,14 @@ object PaymentsModule {
 
     private fun getProcessor(): Set<IntentionProcessor<PaymentsState, PaymentsIntention>> =
         setOf(
-            getTickerPriceIntentionProcessor,
+            GetTickerPriceIntentionProcessor(
+                UseCaseModule.provideDailyTickerPrices(
+                    RepositoriesModule.provideStockPricesRepository(
+                        """api.tiingo.com/tiingo/""",
+                        ""
+                    )
+                )
+            ),
             FailureIntentionProcessor(),
             EmptyIntentionProcessor()
         )
