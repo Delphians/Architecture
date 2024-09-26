@@ -1,15 +1,15 @@
 package com.che.architecture.features.shared.app
 
+import com.che.architecture.features.shared.app.processor.TabChangedIntentionProcessor
+import com.che.architecture.atomic.design.tabs.BottomTab
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.interfaces.emptyResult
-import com.che.architecture.features.shared.app.processor.TabChangedIntentionProcessor
-import com.che.architecture.ui.compose.tabs.BottomTab
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class TabChangedIntentionProcessorTest {
 
@@ -25,7 +25,7 @@ internal class TabChangedIntentionProcessorTest {
     }
 
     @Test
-    fun `Processor shouldn't update the state, get the empty result`() = runTest {
+    fun `Processor shouldn't update the state get the empty result`() = runTest {
         val result =
             testSubject.process(flowOf(AppIntentions.TabChangedIntention(BottomTab.PAYMENTS)))
                 .firstOrNull()
