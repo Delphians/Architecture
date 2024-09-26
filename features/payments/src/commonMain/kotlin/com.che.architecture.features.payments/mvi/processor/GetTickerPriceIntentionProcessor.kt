@@ -6,7 +6,7 @@ import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.FAKE_DELAY
 import com.che.architecture.domain.fakes.FakeStockData.fakeEndDate
 import com.che.architecture.domain.fakes.FakeStockData.fakeStartDate
-import com.che.architecture.domain.usecase.prices.DailyTickerPrices
+import com.che.architecture.domain.prices.DailyTickerPrices
 import com.che.architecture.features.payments.mvi.DailyPriceResults
 import com.che.architecture.features.payments.mvi.EmptyResults
 import com.che.architecture.features.payments.mvi.LoadingResults
@@ -18,7 +18,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.transform
 
-@SuppressWarnings("UnusedPrivateProperty")
 internal class GetTickerPriceIntentionProcessor(
     private val dailyTickerPrices: DailyTickerPrices
 ) : IntentionProcessor<PaymentsState, PaymentsIntention> {

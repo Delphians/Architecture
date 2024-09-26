@@ -15,20 +15,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.che.architecture.domain.fakes.FakeStockData
+import com.che.architecture.atomic.design.foundation.dimension.LocalPadding
 import com.che.architecture.features.payments.mvi.PaymentsState
-import com.che.architecture.ui.compose.foundation.ArchitectureTheme
-import com.che.architecture.ui.compose.foundation.dimension.LocalPadding
-import kotlinx.collections.immutable.toPersistentList
-import java.text.DecimalFormat
 
 @Composable
 internal fun PaymentsScreen(
@@ -71,7 +65,7 @@ internal fun PaymentsScreen(
                         style = typography.bodyMedium
                     )
                     Text(
-                        text = priceFormat.format(it.close),
+                        text = "${it.close}",
                         style = typography.bodyMedium,
                         modifier = Modifier
                             .padding(
@@ -92,23 +86,4 @@ internal fun PaymentsScreen(
     }
 }
 
-private val priceFormat = DecimalFormat("#,###.##")
 
-@SuppressWarnings("UnusedPrivateMember")
-@PreviewLightDark
-@Composable
-private fun PaymentsScreenPreview() {
-    ArchitectureTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-            PaymentsScreen(
-                paymentsState = PaymentsState(
-                    FakeStockData.fakePricesGenerator(
-                        FakeStockData.dateRange
-                    ).toPersistentList()
-                )
-            )
-        }
-    }
-}

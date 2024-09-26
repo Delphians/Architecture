@@ -5,8 +5,8 @@ import com.che.architecture.features.payments.mvi.PaymentsIntention
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 internal class FailureIntentionProcessorTest {
 
@@ -17,6 +17,6 @@ internal class FailureIntentionProcessorTest {
         val actualResult = testSubject.process(
             flowOf(PaymentsIntention.FailureIntention(Throwable()))
         ).first()
-        Assertions.assertTrue(actualResult::class == FailureResults::class)
+        assertTrue(actualResult::class == FailureResults::class)
     }
 }
