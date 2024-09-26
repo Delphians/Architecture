@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="home">Home</string>
+    <string name="payments">Payments</string>
+    <string name="chart">Chart</string>
+    <string name="error">Error</string>
+    <string name="warning">Warning</string>
+    <string name="somethingWentWrong">Something went wrong</string>
+    <string name="alertDialog">Alert dialog</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="confirm">Confirm</string>
+</resources>
