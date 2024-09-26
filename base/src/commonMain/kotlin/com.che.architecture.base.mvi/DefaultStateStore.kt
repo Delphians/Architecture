@@ -5,12 +5,6 @@ import com.che.architecture.base.mvi.interfaces.StateStore
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-interface DefaultStateStoreFactory<State : Any> {
-    fun create(
-        initialState: State
-    ): DefaultStateStore<State>
-}
-
 class DefaultStateStore<State : Any>(
     private val initialState: State
 ) : StateStore<State> {
