@@ -1,11 +1,10 @@
-package com.che.architecture.domain.usecase.prices
+package com.che.architecture.domain.prices.implementation
 
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.repositories.FakeStockPricesRepository
-import com.che.architecture.domain.usecase.prices.implementation.DailyTickerPricesImpl
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 internal class DailyTickerPricesImplTest {
 

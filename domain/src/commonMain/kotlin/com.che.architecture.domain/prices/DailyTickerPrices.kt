@@ -1,4 +1,4 @@
-package com.che.architecture.domain.usecase.prices
+package com.che.architecture.domain.prices
 
 import com.che.architecture.domain.model.Price
 import com.che.architecture.domain.model.Ticker
