@@ -1,34 +1,31 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.configAndroidLibrary
+import com.che.architecture.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
+    kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android")
     id("kotlin-parcelize")
-    id("kotlin-kapt")
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+}
+
+kotlin {
+    configureMultiplatform("features.shared")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.atomicDesign)
+            implementation(projects.base)
+            implementation(compose.ui)
+            implementation(libs.compose.navigation)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
 
 android {
     namespace = "com.che.architecture.features.shared"
-}
-
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":ui:compose"),
-        project(":base"),
-        project(":baseAndroid")
-    )
-    useCompose(isNavigation = true)
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test
-    )
-
-    useJUnitPlatform()
+    configAndroidLibrary()
 }
