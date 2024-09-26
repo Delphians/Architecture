@@ -5,8 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,12 +16,10 @@ import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.model.Ticker
-import com.che.architecture.ui.compose.foundation.ArchitectureTheme
 
 @Composable
 internal fun HomeScreen(
@@ -62,15 +58,3 @@ internal fun HomeScreen(
     }
 }
 
-@SuppressWarnings("UnusedPrivateMember")
-@PreviewLightDark
-@Composable
-private fun HomeScreenPreview() {
-    ArchitectureTheme {
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-            HomeScreen {}
-        }
-    }
-}

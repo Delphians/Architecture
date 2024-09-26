@@ -8,11 +8,11 @@ import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
-import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
-import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
-import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
+import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
+import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.processor.OpenScreenDetailsProcessor
 
 internal object HomepageModule {
