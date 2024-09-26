@@ -6,9 +6,9 @@ import com.che.architecture.data.remote.datasource.TiingoPathParams
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.fakes.FakeStockData.FAKE_TIINGO_URL
 import com.che.architecture.domain.fakes.FakeStockData.FAKE_TOKEN
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import com.che.architecture.domain.fakes.FakeStockData.dateRange
+import kotlin.test.assertEquals
+import kotlin.test.Test
 
 internal class TiingoUrlBuilderTest {
     private val testSubject = TiingoUrlBuilder(FAKE_TIINGO_URL, FAKE_TOKEN)
