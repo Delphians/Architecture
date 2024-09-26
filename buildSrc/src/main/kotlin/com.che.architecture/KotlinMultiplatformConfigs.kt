@@ -2,20 +2,19 @@ package com.che.architecture
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
-fun KotlinMultiplatformExtension.configureMultiplatform() {
+fun KotlinMultiplatformExtension.configureMultiplatform(name: String) {
     androidTarget {
         compilerOptions.apply {
             jvmTarget.set(AndroidSdk.jvmTarget)
         }
     }
     listOf(
-        iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
+        iosArm64(), //real iPhone
+        iosSimulatorArm64() //iOS simulator on macOS with Apple Silicon M1
     ).forEach {
         it.binaries.framework {
-            baseName = "shared"
-            isStatic = true
+            baseName = name
+            binaryOption("bundleId", "com.che.architecture"+name)
         }
     }
 }
