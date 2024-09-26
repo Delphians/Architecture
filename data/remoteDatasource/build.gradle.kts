@@ -1,33 +1,33 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.configAndroidLibrary
+import com.che.architecture.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
-    id("kotlin")
-    id("kotlin-kapt")
+    kotlin("multiplatform")
+    id("com.android.library")
 }
 
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":domain"),
-        project(":base"),
-        Libraries.KtorClient.core,
-        Libraries.KtorClient.cio,
-        Libraries.KtorClient.serialization,
-        Libraries.KtorClient.content_negotiation,
-        Libraries.Kotlinx.dateTime,
-        Libraries.KtorClient.ktorMockClient
-    )
+kotlin {
+    configureMultiplatform("data.remoteDatasource")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.base)
+            implementation(projects.domain)
+            implementation(libs.datetime)
+            implementation(libs.ktor.ktorMockClient)
+            implementation(libs.ktor.core)
+            implementation(libs.ktor.cio)
+            implementation(libs.ktor.serialization)
+            implementation(libs.ktor.content.negotiation)
 
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test,
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
+}
 
-        "ch.qos.logback:logback-classic:1.2.9"
-    )
-
-    useJUnitPlatform()
+android {
+    namespace = "com.che.architecture.data.remoteDatasource"
+    configAndroidLibrary()
 }
