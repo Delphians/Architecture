@@ -2,6 +2,7 @@ import com.che.architecture.configAndroidLibrary
 import com.che.architecture.configureMultiplatform
 
 plugins {
+    id("architecture-plugin")
     kotlin("multiplatform")
     id("com.android.application")
     alias(libs.plugins.jetbrainsCompose)
