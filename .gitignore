@@ -12,6 +12,7 @@
 .cxx
 /buildSrc/build/
 .java-version
+.hprof
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
