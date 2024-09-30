@@ -2,6 +2,7 @@ rootProject.name = "Architecture"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 pluginManagement {
+    includeBuild("plugins/common")
     repositories {
         google()
         gradlePluginPortal()

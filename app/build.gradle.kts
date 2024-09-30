@@ -1,8 +1,7 @@
-import com.che.architecture.configAndroidLibrary
-import com.che.architecture.configureMultiplatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
+    id("android.architecture.plugin")
     kotlin("multiplatform")
     id("com.android.application")
     alias(libs.plugins.jetbrainsCompose)
@@ -41,5 +40,4 @@ kotlin {
 
 android {
     namespace = "com.che.architecture.app"
-    configAndroidLibrary()
 }

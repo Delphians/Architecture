@@ -1,4 +1,4 @@
-package com.che.architecture
+package com.che.architecture.plugins.common
 
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
@@ -14,7 +14,7 @@ fun KotlinMultiplatformExtension.configureMultiplatform(name: String) {
     ).forEach {
         it.binaries.framework {
             baseName = name
-            binaryOption("bundleId", "com.che.architecture"+name)
+            binaryOption("bundleId", "com.che.architecture" + name)
         }
     }
 }
