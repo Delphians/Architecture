@@ -1,4 +1,4 @@
-package com.che.architecture
+package com.che.architecture.plugins.common
 
 import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.DetektPlugin

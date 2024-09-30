@@ -12,3 +12,12 @@ dependencies {
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.6")
 }
 
+gradlePlugin {
+    plugins {
+        register("android.architecture.plugin") {
+            id = "android.architecture.plugin"
+            implementationClass = "com.che.architecture.plugins.common.ArchitecturePlugin"
+        }
+    }
+}
+

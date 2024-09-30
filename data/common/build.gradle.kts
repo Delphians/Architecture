@@ -1,14 +1,13 @@
-import com.che.architecture.configAndroidLibrary
-import com.che.architecture.configureMultiplatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
+    id("android.architecture.plugin")
     kotlin("multiplatform")
     id("com.android.library")
 }
 
 kotlin {
-   configureMultiplatform("data.common")
-
+    configureMultiplatform("data.common")
     sourceSets {
         commonMain.dependencies {
             implementation(projects.base)
@@ -27,5 +26,4 @@ kotlin {
 
 android {
     namespace = "com.che.architecture.data.common"
-    configAndroidLibrary()
 }

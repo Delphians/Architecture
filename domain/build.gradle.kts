@@ -1,7 +1,7 @@
-import com.che.architecture.configAndroidLibrary
-import com.che.architecture.configureMultiplatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
+    id("android.architecture.plugin")
     kotlin("multiplatform")
     id("com.android.library")
     id("kotlinx-serialization")
@@ -27,6 +27,5 @@ kotlin {
 
 android {
     namespace = "com.che.architecture.domain"
-    configAndroidLibrary()
 }
 
