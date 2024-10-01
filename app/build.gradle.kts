@@ -1,4 +1,5 @@
 import com.che.architecture.plugins.common.configureMultiplatform
+import com.che.architecture.plugins.common.handleProductFlavour
 
 plugins {
     id("android.architecture.plugin")
@@ -40,4 +41,8 @@ kotlin {
 
 android {
     namespace = "com.che.architecture.app"
+
+    handleProductFlavour()
+
+    buildFeatures { buildConfig = true }
 }

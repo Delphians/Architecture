@@ -34,20 +34,20 @@ fun BaseExtension.handleProductFlavour() {
             applicationIdSuffix = ".${ProductFlavors.STAGING}"
 
             buildConfigField(
-                "String", EnvironmentUrls.TIINGO_BASE_URL, """api.tiingo.com/tiingo/"""
+                "String", EnvironmentUrls.TIINGO_BASE_URL, "\"api.tiingo.com/tiingo/\""
             )
 
             buildConfigField(
-                "String", ApiTokens.TIINGO, ""
+                "String", ApiTokens.TIINGO, "\"\""
             )
         }
         register(ProductFlavors.PRODUCTION) {
             buildConfigField(
-                "String", EnvironmentUrls.TIINGO_BASE_URL, """api.tiingo.com/tiingo/"""
+                "String", EnvironmentUrls.TIINGO_BASE_URL, "\"api.tiingo.com/tiingo/\""
             )
 
             buildConfigField(
-                "String", ApiTokens.TIINGO, ""
+                "String", ApiTokens.TIINGO, "\"\""
             )
         }
     }
