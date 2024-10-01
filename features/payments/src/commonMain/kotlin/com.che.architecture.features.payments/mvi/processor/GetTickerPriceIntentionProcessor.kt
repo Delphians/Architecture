@@ -30,11 +30,14 @@ internal class GetTickerPriceIntentionProcessor(
                 delay(FAKE_DELAY)
 
                 // To get the fake data
-                val prices = FakeStockData
-                    .fakePricesGenerator(fakeStartDate..fakeEndDate).toPersistentList()
+                var prices = FakeStockData
+                    .fakePricesGenerator(fakeStartDate..fakeEndDate)
+                    .toPersistentList()
 
                 // To get the real data from Tiingo
-                // val prices = dailyTickerPrices(it.ticker, it.dateRange)
+                if (prices.isEmpty()) {
+                    prices = dailyTickerPrices(it.ticker, it.dateRange).toPersistentList()
+                }
 
                 emit(
                     if (prices.isNotEmpty()) {

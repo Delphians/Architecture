@@ -1,3 +1,4 @@
+@file:Suppress("MatchingDeclarationName")
 package com.che.architecture
 
 class AndroidPlatform : Platform {

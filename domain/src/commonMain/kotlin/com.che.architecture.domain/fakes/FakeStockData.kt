@@ -8,6 +8,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 import kotlin.random.Random
 
+@Suppress("MagicNumber")
 object FakeStockData {
 
     const val FAKE_TIINGO_URL = "api.tiingo.com/tiingo"

@@ -63,7 +63,6 @@ internal class HomepageNavigation : NavigationGraphBuilder {
                 viewModel.stop()
             }
         }
-
     }
 
     private fun NavGraphBuilder.handleHomeScreen() {

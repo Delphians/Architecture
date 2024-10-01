@@ -15,6 +15,7 @@ import com.che.architecture.atomic.design.foundation.dimension.LocalPadding
 
 private data class Point(val x: Float, val y: Float)
 
+@Suppress("MagicNumber")
 @Composable
 fun DrawChart(
     modifier: Modifier = Modifier,
