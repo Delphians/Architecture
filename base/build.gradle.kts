@@ -1,29 +1,27 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
-    id("kotlin")
-    id("kotlin-kapt")
+    id("android.architecture.plugin")
+    kotlin("multiplatform")
+    id("com.android.library")
 }
 
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        Libraries.Coroutines.core
-    )
-
-    useDagger(false)
-    useCompose()
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test
-    )
-
-    useJUnitPlatform()
+kotlin {
+    configureMultiplatform("base")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.coroutines.core)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
+
+android {
+    namespace = "com.che.architecture.base"
+}
+
+
+

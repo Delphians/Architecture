@@ -1,12 +1,29 @@
 rootProject.name = "Architecture"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+pluginManagement {
+    includeBuild("plugins/common")
+    repositories {
+        google()
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 include(":app")
 include(":base")
-include(":baseAndroid")
-include(":data")
 include(":domain")
+include(":data:common")
+include(":data:remoteDatasource")
+include(":atomicDesign")
 include(":features:homepage")
-include(":features:payments")
-include(":features:chart")
 include(":features:shared")
-include(":ui:compose")
+include(":features:chart")
+include(":features:payments")

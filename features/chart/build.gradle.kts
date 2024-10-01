@@ -1,40 +1,40 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
+    id("android.architecture.plugin")
+    kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+}
+
+kotlin {
+    configureMultiplatform("features.chart")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.base)
+            implementation(projects.domain)
+            implementation(projects.atomicDesign)
+            implementation(projects.features.shared)
+            implementation(libs.coroutines.core)
+            implementation(libs.compose.navigation)
+            implementation(libs.androidx.lifecycle.compose)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.immutable.collections)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
 
 android {
     namespace = "com.che.architecture.features.chart"
 }
 
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":base"),
-        project(":baseAndroid"),
-        project(":features:shared"),
-        project(":ui:compose"),
-        project(":domain"),
-        Libraries.Kotlinx.immutableCollections
-    )
-
-    useDagger()
-    useCompose(isFullPackage = true, isNavigation = true)
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test
-    )
-
-    useJUnitPlatform()
-}

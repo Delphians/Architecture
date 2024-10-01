@@ -1,81 +1,48 @@
-import com.che.architecture.Libraries
-import com.che.architecture.Versions.appVersion
-import com.che.architecture.handleProductFlavour
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
-import org.jetbrains.kotlin.compose.compiler.gradle.ComposeFeatureFlag
+import com.che.architecture.plugins.common.configureMultiplatform
+import com.che.architecture.plugins.common.handleProductFlavour
 
 plugins {
-    id("architecture-plugin")
+    id("android.architecture.plugin")
+    kotlin("multiplatform")
     id("com.android.application")
-    id("dagger.hilt.android.plugin")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.owasp.dependencycheck") version "7.1.2"
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+}
+
+kotlin {
+    configureMultiplatform("app")
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
+        }
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(projects.atomicDesign)
+            implementation(projects.base)
+            implementation(projects.domain)
+            implementation(projects.data.common)
+            implementation(projects.features.homepage)
+            implementation(projects.features.shared)
+            implementation(projects.features.payments)
+            implementation(projects.features.chart)
+            implementation(libs.compose.navigation)
+            implementation(libs.androidx.lifecycle.compose)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+    }
 }
 
 android {
-    namespace = "com.che.architecture"
-
-    defaultConfig {
-        applicationId = "com.che.architecture"
-        versionCode = appVersion.replace(".", "").toInt()
-        versionName = appVersion
-    }
-
-    buildFeatures { buildConfig = true }
+    namespace = "com.che.architecture.app"
 
     handleProductFlavour()
 
-    dependencyCheck {
-        failBuildOnCVSS = 0F
-
-        fun String.startsWithAny(
-            vararg prefixCollection: String,
-            ignoreCase: Boolean = false
-        ): Boolean {
-            prefixCollection.forEach {
-                if (this.startsWith(it, ignoreCase))
-                    return true
-            }
-            return false
-        }
-
-        scanConfigurations = configurations.filter {
-            !it.name.startsWithAny("androidTest", "test", "debug") &&
-                    it.name.contains("DependenciesMetadata") && (
-                    it.name.startsWithAny("api", "implementation", "runtimeOnly") ||
-                            it.name.contains("Api") ||
-                            it.name.contains("Implementation") ||
-                            it.name.contains("RuntimeOnly")
-                    )
-        }.map { it.name }
-    }
-
-    composeCompiler {
-        featureFlags.add(ComposeFeatureFlag.StrongSkipping)
-    }
-}
-
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":data"),
-        project(":domain"),
-        project(":base"),
-        project(":baseAndroid"),
-        project(":ui:compose"),
-        project(":features:shared"),
-        project(":features:homepage"),
-        project(":features:payments"),
-        project(":features:chart"),
-        Libraries.Androidx.core,
-        Libraries.Androidx.Compose.activityCompose
-    )
-
-    useDagger()
-    useCompose(true, true)
+    buildFeatures { buildConfig = true }
 }

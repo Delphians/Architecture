@@ -1,31 +1,31 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useDagger
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
-    id("kotlin")
-    id("kotlin-kapt")
+    id("android.architecture.plugin")
+    kotlin("multiplatform")
+    id("com.android.library")
     id("kotlinx-serialization")
 }
 
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":base"),
-        Libraries.Kotlinx.serialization,
-        Libraries.Coroutines.core,
-        Libraries.Kotlinx.immutableCollections
-    )
 
-    useDagger(isAndroidModule = false)
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test,
-    )
-
-    useJUnitPlatform()
+kotlin {
+    configureMultiplatform("domain")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.base)
+            implementation(libs.coroutines.core)
+            implementation(libs.datetime)
+            implementation(libs.immutable.collections)
+            implementation(libs.serialization)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
+
+android {
+    namespace = "com.che.architecture.domain"
+}
+

@@ -1,39 +1,39 @@
-import com.che.architecture.Libraries
-import com.che.architecture.utils.ConfigurationName
-import com.che.architecture.utils.add
-import com.che.architecture.utils.useCompose
-import com.che.architecture.utils.useDagger
-import com.che.architecture.utils.useJUnitPlatform
+import com.che.architecture.plugins.common.configureMultiplatform
 
 plugins {
-    id("architecture-plugin")
+    id("android.architecture.plugin")
+    kotlin("multiplatform")
     id("com.android.library")
-    id("kotlin-android")
-    id("kotlin-kapt")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+}
+
+kotlin {
+    configureMultiplatform("features.homepage")
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.base)
+            implementation(projects.domain)
+            implementation(projects.atomicDesign)
+            implementation(projects.features.shared)
+            implementation(libs.coroutines.core)
+            implementation(libs.compose.navigation)
+            implementation(libs.androidx.lifecycle.compose)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+        }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+            implementation(libs.coroutines.test)
+        }
+    }
 }
 
 android {
     namespace = "com.che.architecture.features.homepage"
 }
 
-dependencies {
-    add(
-        configurationName = ConfigurationName.IMPLEMENTATION,
-        project(":features:shared"),
-        project(":base"),
-        project(":baseAndroid"),
-        project(":ui:compose"),
-        project(":domain")
-    )
-
-    useDagger()
-    useCompose(isFullPackage = true, isNavigation = true)
-
-    add(
-        configurationName = ConfigurationName.TEST_IMPLEMENTATION,
-        Libraries.Coroutines.test
-    )
-
-    useJUnitPlatform()
-}
