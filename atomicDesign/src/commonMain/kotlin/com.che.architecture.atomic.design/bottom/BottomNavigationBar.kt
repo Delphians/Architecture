@@ -7,7 +7,6 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.NonRestartableComposable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.che.architecture.atomic.design.tabs.BottomTab
@@ -15,7 +14,6 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-@NonRestartableComposable
 fun BottomNavigationBar(
     tabs: List<BottomTab>,
     currentTab: BottomTab,
