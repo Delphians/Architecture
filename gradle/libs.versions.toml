@@ -40,9 +40,6 @@ ktor-content-negotiation = { group = "io.ktor", name = "ktor-client-content-nego
 ktor-serialization = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-ktorMockClient = { group = "io.ktor", name = "ktor-client-mock", version.ref = "ktor" }
 
-mockk = { module = "io.mockk:mockk", version.ref =  "mockk" }
-mockkAndroid = { module = "io.mockk:mockk-android", version.ref = "mockk" }
-
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
