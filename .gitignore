@@ -12,7 +12,8 @@
 .cxx
 /buildSrc/build/
 .java-version
-.hprof
+*.hprof
+/stability-config.txt
 
 # Files that might appear in the root of a volume
 .DocumentRevisions-V100
