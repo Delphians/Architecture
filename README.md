@@ -4,10 +4,9 @@ Kotlin Multiplatform application (Android + IOS).
 
 The app downloads stock prices data from Tiingo. Show the list of the prices and draw a chart. 
 
-# Tech stack of the base project:   
-    `Clean Architecture, Single Activity, MVI, Coroutines, 
-     Compose Multiplatform, Material3, Atomic design, Ktor, 
-     Compose Navigation`
+# Tech stack of the project:   
+    `Clean Architecture, Single Activity, MVI, Coroutines, Room 
+     Compose Multiplatform, Material3, Atomic design, Ktor, Compose Navigation`
 
 # The structure of the project:
 
@@ -16,6 +15,7 @@ The app downloads stock prices data from Tiingo. Show the list of the prices and
 * `base`                  - MVI base classes
 * `data:common`           - Common repositories
 * `data:remoteDatasource` - Ktor framework, Tiingo data source for getting stocks prices 
+* `data:localDatasource`  - Room database for saving prices data 
 * `domain`                - Business logic and fake data 
 * `features:shared`       - App Mvi classes, the logic for all features 
 * `features:chart`        - Draw the fake chart
@@ -37,8 +37,8 @@ The app downloads stock prices data from Tiingo. Show the list of the prices and
 * Support rotation, lifecycle
 * Check the network communication
 * Add navigation tests  
-* Add Room, ExoPlayer(DASH over HTTPs), Location (Google Maps SDK), Pushes, GraphQL, Websockets, 
-BLE, NFC features 
+* Add Koin, ExoPlayer(DASH over HTTPs), Location (Google Maps SDK), Pushes, GraphQL, Websockets, 
+BLE, NFC features, Stripe 
 
 # If you have any questions
 
