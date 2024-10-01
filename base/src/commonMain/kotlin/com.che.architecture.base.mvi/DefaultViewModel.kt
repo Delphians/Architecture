@@ -65,4 +65,3 @@ class DefaultViewModel<MviState : Any, Intention : Any, Event : Any>(
             }.launchIn(_viewModelScope)
     }
 }
-

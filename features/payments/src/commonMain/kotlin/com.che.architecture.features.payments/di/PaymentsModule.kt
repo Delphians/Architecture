@@ -24,6 +24,7 @@ object PaymentsModule {
 
     private lateinit var getTickerPriceIntentionProcessor: GetTickerPriceIntentionProcessor
 
+    @Suppress("UnusedParameter")
     fun paymentsModuleInjection(
         dailyTickerPrices: DailyTickerPrices
     ) {

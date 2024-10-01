@@ -36,7 +36,7 @@ private val navigationGraphs: Set<NavigationGraphBuilder> by lazy {
     )
 }
 
-private val tabNavigation: TabNavigation =  TabNavigation(navigationGraphs)
+private val tabNavigation: TabNavigation = TabNavigation(navigationGraphs)
 
 private val tabs = BottomTab.entries.toList()
 

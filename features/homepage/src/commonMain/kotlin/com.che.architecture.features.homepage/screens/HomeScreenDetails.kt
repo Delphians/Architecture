@@ -56,4 +56,3 @@ internal fun HomeScreenDetails(
         )
     }
 }
-
