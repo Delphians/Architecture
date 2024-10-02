@@ -8,6 +8,9 @@ fun KotlinMultiplatformExtension.configureMultiplatform(name: String) {
             jvmTarget.set(AndroidSdk.jvmTarget)
         }
     }
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     listOf(
         iosArm64(), //real iPhone
         iosSimulatorArm64() //iOS simulator on macOS with Apple Silicon M1

@@ -5,6 +5,7 @@ import com.android.build.gradle.LibraryExtension
 import org.gradle.api.Project
 import org.gradle.api.tasks.Delete
 import org.gradle.kotlin.dsl.withType
+import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinJvmCompile
 
 internal fun Project.configureForRootProject() {
@@ -30,7 +31,7 @@ internal fun Project.configureForAllProjects() {
             if (project.findProperty("composeCompilerReports") == "true") {
                 freeCompilerArgs.addAll(
                     "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.buildDir.absolutePath}/compose_compiler_report"
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${project.layout.buildDirectory.get()}/compose_compiler_report"
                 )
             }
             if (project.findProperty("composeCompilerMetrics") == "true") {
@@ -49,3 +50,5 @@ internal val Project.appExtension: AppExtension
 internal val Project.libraryExtension: LibraryExtension
     get() = extensions.getByType(LibraryExtension::class.java)
 
+internal val Project.kotlinMultiplatformExtension: KotlinMultiplatformExtension
+    get() = extensions.getByType(KotlinMultiplatformExtension::class.java)

@@ -16,12 +16,6 @@ kotlin {
             implementation(libs.androidx.activity.compose)
         }
         commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.ui)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
             implementation(projects.atomicDesign)
             implementation(projects.base)
             implementation(projects.domain)
@@ -30,8 +24,20 @@ kotlin {
             implementation(projects.features.shared)
             implementation(projects.features.payments)
             implementation(projects.features.chart)
+
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+
             implementation(libs.compose.navigation)
             implementation(libs.androidx.lifecycle.compose)
+
+            api(libs.koin.core)
+            implementation(libs.koin.compose)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
