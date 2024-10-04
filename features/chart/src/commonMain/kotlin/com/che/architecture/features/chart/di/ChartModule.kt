@@ -14,31 +14,43 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
 
-internal object ChartModule {
+internal fun loadModules() {
+    loadKoinModules(chartModule)
+}
 
-    fun getViewModel(): MviViewModel<ChartState, ChartIntention, ChartUiEvent> =
+internal val chartModule = module {
+
+    single<MviViewModel<ChartState, ChartIntention, ChartUiEvent>> {
         DefaultViewModel(
-            stateStore = getStateStore(),
-            eventsListener = getEventListener(),
-            intentionProcessors = getProcessors(),
-            intentionDispatcher = getIntentionDispatcher()
+            stateStore = get(),
+            eventsListener = get(),
+            intentionProcessors = get(),
+            intentionDispatcher = get()
         )
+    }
 
-    private val eventHandler = DefaultEventsHandler<ChartUiEvent>()
+    single<EventsListener<ChartUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private fun getEventListener(): EventsListener<ChartUiEvent> =
-        eventHandler
+    single<EventsDispatcher<ChartUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private fun getEventDispatcher(): EventsDispatcher<ChartUiEvent> =
-        eventHandler
-
-    private fun getIntentionDispatcher(): IntentionDispatcher<ChartIntention> =
-        DefaultIntentionDispatcher()
-
-    private fun getStateStore(): StateStore<ChartState> =
+    single<StateStore<ChartState>> {
         DefaultStateStore(ChartState())
+    }
 
-    private fun getProcessors(): Set<IntentionProcessor<ChartState, ChartIntention>> =
-        setOf(InitialIntentionProcessor())
+    single<IntentionDispatcher<ChartIntention>> {
+        DefaultIntentionDispatcher()
+    }
+
+    single<Set<IntentionProcessor<ChartState, ChartIntention>>> {
+        setOf(
+            InitialIntentionProcessor()
+        )
+    }
 }

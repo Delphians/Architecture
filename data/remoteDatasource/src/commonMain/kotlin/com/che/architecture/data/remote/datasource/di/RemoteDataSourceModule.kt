@@ -3,14 +3,18 @@ package com.che.architecture.data.remote.datasource.di
 import com.che.architecture.data.remote.datasource.tiingo.TiingoDataSource
 import com.che.architecture.data.remote.datasource.tiingo.TiingoDataSourceImpl
 import com.che.architecture.data.remote.datasource.tiingo.TiingoUrlBuilder
+import org.koin.dsl.module
 
-object RemoteDataSourceModule {
+val remoteDataSourceModule = module {
 
-    fun provideTiingoDataSource(
-        tiingoBaseUrl: String,
-        tiingoToken: String
-    ): TiingoDataSource = TiingoDataSourceImpl(
-        tiingoUrlBuilder = TiingoUrlBuilder(tiingoBaseUrl, tiingoToken),
-        ktorClient = KtorModule.provideKtorClient()
-    )
+    single<TiingoDataSource> {
+        TiingoDataSourceImpl(
+            tiingoUrlBuilder = get(),
+            ktorClient = get()
+        )
+    }
+
+    factory { (tiingoBaseUrl: String, tiingoToken: String) ->
+        TiingoUrlBuilder(tiingoBaseUrl, tiingoToken)
+    }
 }

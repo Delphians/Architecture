@@ -3,43 +3,53 @@ package com.che.architecture.features.shared.di
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.DefaultIntentionDispatcher
 import com.che.architecture.base.mvi.DefaultStateStore
-import com.che.architecture.features.shared.app.AppIntentions
-import com.che.architecture.features.shared.app.AppMviState
-import com.che.architecture.features.shared.app.AppUiEvent
-import com.che.architecture.features.shared.app.processor.TabChangedIntentionProcessor
-import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.DefaultViewModel
 import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
+import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
+import com.che.architecture.domain.di.errorDomainModule
+import com.che.architecture.features.shared.app.AppIntentions
+import com.che.architecture.features.shared.app.AppMviState
+import com.che.architecture.features.shared.app.AppUiEvent
+import com.che.architecture.features.shared.app.processor.TabChangedIntentionProcessor
+import org.koin.dsl.module
 
-object AppModule {
+val appModule = module {
 
-    fun getAppViewModel(): MviViewModel<AppMviState, AppIntentions, AppUiEvent> =
+    includes(errorDomainModule)
+
+    single<MviViewModel<AppMviState, AppIntentions, AppUiEvent>> {
         DefaultViewModel(
-            stateStore = getStateStore(),
-            eventsListener = getEvenListener(),
-            intentionProcessors = getProcessor(),
-            intentionDispatcher = getIntentionDispatcher(),
+            stateStore = get(),
+            eventsListener = get(),
+            intentionProcessors = get(),
+            intentionDispatcher = get(),
             initialIntention = AppIntentions.InitialIntention
         )
+    }
 
-    private val eventHandler = DefaultEventsHandler<AppUiEvent>()
+    single<EventsListener<AppUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private fun getEventDispatcher(): EventsDispatcher<AppUiEvent> =
-        eventHandler
+    single<EventsDispatcher<AppUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private fun getEvenListener(): EventsListener<AppUiEvent> =
-        eventHandler
-
-    private fun getIntentionDispatcher(): IntentionDispatcher<AppIntentions> =
-        DefaultIntentionDispatcher()
-
-    private fun getStateStore(): StateStore<AppMviState> =
+    single<StateStore<AppMviState>> {
         DefaultStateStore(AppMviState())
+    }
 
-    private fun getProcessor(): Set<IntentionProcessor<AppMviState, AppIntentions>> =
-        setOf(TabChangedIntentionProcessor(getEventDispatcher()))
+    single<IntentionDispatcher<AppIntentions>> {
+        DefaultIntentionDispatcher()
+    }
+
+    single<Set<IntentionProcessor<AppMviState, AppIntentions>>> {
+        setOf(
+            TabChangedIntentionProcessor(get())
+        )
+    }
 }

@@ -5,10 +5,10 @@ import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.koin.dsl.module
 
-internal object KtorModule {
-
-    private val ktorClient by lazy {
+internal val ktorModule = module {
+    single {
         HttpClient(CIO) {
             install(ContentNegotiation) {
                 json(
@@ -20,6 +20,4 @@ internal object KtorModule {
             }
         }
     }
-
-    fun provideKtorClient() = ktorClient
 }

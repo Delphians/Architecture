@@ -1,11 +1,14 @@
 package com.che.architecture.features.payments.di
 
-import com.che.architecture.domain.di.ErrorDomainModule
 import com.che.architecture.features.payments.navigation.PaymentsNavigation
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-object PaymentsNavigationModule {
-    fun getPaymentsNavigation(): NavigationGraphBuilder = PaymentsNavigation(
-        ErrorDomainModule.provideEventListener()
-    )
+const val PAYMENTS_NAVIGATION = "PaymentsNavigation"
+
+val paymentsNavigationModule = module {
+    single<NavigationGraphBuilder>(named(PAYMENTS_NAVIGATION)) {
+        PaymentsNavigation()
+    }
 }

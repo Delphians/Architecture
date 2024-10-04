@@ -16,15 +16,19 @@ kotlin {
             implementation(projects.domain)
             implementation(projects.atomicDesign)
             implementation(projects.features.shared)
+
             implementation(libs.coroutines.core)
             implementation(libs.compose.navigation)
             implementation(libs.androidx.lifecycle.compose)
+
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

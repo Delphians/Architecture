@@ -12,12 +12,16 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.base)
             implementation(projects.domain)
+
             implementation(libs.datetime)
+
             implementation(libs.ktor.ktorMockClient)
             implementation(libs.ktor.core)
             implementation(libs.ktor.cio)
             implementation(libs.ktor.serialization)
             implementation(libs.ktor.content.negotiation)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

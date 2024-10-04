@@ -14,44 +14,31 @@ import com.che.architecture.atomic.design.bottom.BottomNavigationBar
 import com.che.architecture.atomic.design.foundation.ArchitectureTheme
 import com.che.architecture.atomic.design.tabs.BottomTab
 import com.che.architecture.base.mvi.interfaces.MviViewModel
-import com.che.architecture.features.homepage.di.HomepageNavigationModule
+import com.che.architecture.di.GRAPH
 import com.che.architecture.features.shared.app.AppIntentions
 import com.che.architecture.features.shared.app.AppMviState
 import com.che.architecture.features.shared.app.AppUiEvent
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.navigation.TabNavigation
-import com.che.architecture.features.chart.di.ChartNavigationModule
-import com.che.architecture.features.payments.di.PaymentsNavigationModule
-import com.che.architecture.features.shared.di.AppModule
+import com.che.architecture.navigation.routeBindWithTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-
-private lateinit var appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent>
-
-private val navigationGraphs: Set<NavigationGraphBuilder> by lazy {
-    setOf(
-        HomepageNavigationModule.getHomepageNavigation(),
-        PaymentsNavigationModule.getPaymentsNavigation(),
-        ChartNavigationModule.getChartNavigation()
-    )
-}
-
-private val tabNavigation: TabNavigation = TabNavigation(navigationGraphs)
-
-private val tabs = BottomTab.entries.toList()
+import org.koin.compose.koinInject
+import org.koin.core.qualifier.named
 
 @Composable
-internal fun App() {
+internal fun App(
+    appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent> = koinInject(),
+    navigationGraphs: Set<NavigationGraphBuilder> = koinInject(named(GRAPH))
+) {
 
+    val tabNavigation = TabNavigation(navigationGraphs)
     val scope = LocalLifecycleOwner.current.lifecycleScope
-
     val navController = rememberNavController()
 
     DisposableEffect(Unit) {
 
-        appViewModel = AppModule.getAppViewModel().apply {
-            start(scope)
-        }
+        appViewModel.start(scope)
 
         appViewModel.event.onEach {
             when (it) {
@@ -78,7 +65,13 @@ internal fun App() {
 
     ArchitectureTheme {
         Scaffold(
-            bottomBar = { SetupBottomNavBar(currentRoute, tabs) }
+            bottomBar = {
+                SetupBottomNavBar(currentRoute) {
+                    appViewModel.dispatchIntention(
+                        AppIntentions.TabChangedIntention(it)
+                    )
+                }
+            }
         ) { innerPadding ->
             tabNavigation.SetupTabNavigation(
                 modifier = Modifier.padding(innerPadding),
@@ -91,14 +84,9 @@ internal fun App() {
 @Composable
 private fun SetupBottomNavBar(
     currentRoute: String,
-    tabs: List<BottomTab>
+    onClick: (BottomTab) -> Unit
 ) {
     BottomNavigationBar(
-        currentTab = tabNavigation.routeBindWithTab(currentRoute),
-        tabs = tabs
-    ) {
-        appViewModel.dispatchIntention(
-            AppIntentions.TabChangedIntention(it)
-        )
-    }
+        currentTab = routeBindWithTab(currentRoute),
+    ) { tab -> onClick(tab) }
 }

@@ -10,67 +10,55 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
-import com.che.architecture.data.common.di.RepositoriesModule
-import com.che.architecture.domain.di.UseCaseModule
-import com.che.architecture.domain.prices.DailyTickerPrices
+import com.che.architecture.domain.di.errorDomainModule
+import com.che.architecture.domain.di.useCaseModule
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
 import com.che.architecture.features.payments.mvi.processor.EmptyIntentionProcessor
 import com.che.architecture.features.payments.mvi.processor.FailureIntentionProcessor
 import com.che.architecture.features.payments.mvi.processor.GetTickerPriceIntentionProcessor
+import org.koin.core.context.loadKoinModules
+import org.koin.dsl.module
 
-object PaymentsModule {
+internal fun loadModules() {
+    loadKoinModules(paymentsModule)
+}
 
-    private lateinit var getTickerPriceIntentionProcessor: GetTickerPriceIntentionProcessor
+internal val paymentsModule = module {
 
-    @Suppress("UnusedParameter")
-    fun paymentsModuleInjection(
-        dailyTickerPrices: DailyTickerPrices
-    ) {
-        getTickerPriceIntentionProcessor = GetTickerPriceIntentionProcessor(
-            UseCaseModule.provideDailyTickerPrices(
-                RepositoriesModule.provideStockPricesRepository(
-                    """api.tiingo.com/tiingo/""",
-                    ""
-                )
-            )
+    includes(useCaseModule, errorDomainModule)
+
+    single<MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>> {
+        DefaultViewModel(
+            stateStore = get(),
+            eventsListener = get(),
+            intentionProcessors = get(),
+            intentionDispatcher = get()
         )
     }
 
-    internal fun getViewModel(): MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent> =
-        DefaultViewModel(
-            stateStore = getStateStore(),
-            eventsListener = getEventListener(),
-            intentionProcessors = getProcessor(),
-            intentionDispatcher = getIntentionDispatcher()
-        )
+    single<EventsListener<PaymentsUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private val eventHandler = DefaultEventsHandler<PaymentsUiEvent>()
+    single<EventsDispatcher<PaymentsUiEvent>> {
+        DefaultEventsHandler()
+    }
 
-    private fun getEventListener(): EventsListener<PaymentsUiEvent> =
-        eventHandler
-
-    private fun getEventDispatcher(): EventsDispatcher<PaymentsUiEvent> =
-        eventHandler
-
-    private fun getStateStore(): StateStore<PaymentsState> =
+    single<StateStore<PaymentsState>> {
         DefaultStateStore(PaymentsState())
+    }
 
-    private fun getIntentionDispatcher(): IntentionDispatcher<PaymentsIntention> =
+    single<IntentionDispatcher<PaymentsIntention>> {
         DefaultIntentionDispatcher()
+    }
 
-    private fun getProcessor(): Set<IntentionProcessor<PaymentsState, PaymentsIntention>> =
+    single<Set<IntentionProcessor<PaymentsState, PaymentsIntention>>> {
         setOf(
-            GetTickerPriceIntentionProcessor(
-                UseCaseModule.provideDailyTickerPrices(
-                    RepositoriesModule.provideStockPricesRepository(
-                        """api.tiingo.com/tiingo/""",
-                        ""
-                    )
-                )
-            ),
+            GetTickerPriceIntentionProcessor(get()),
             FailureIntentionProcessor(),
             EmptyIntentionProcessor()
         )
+    }
 }
