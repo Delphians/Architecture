@@ -7,6 +7,8 @@ import org.koin.dsl.module
 
 val remoteDataSourceModule = module {
 
+    includes(ktorModule)
+
     single<TiingoDataSource> {
         TiingoDataSourceImpl(
             tiingoUrlBuilder = get(),
