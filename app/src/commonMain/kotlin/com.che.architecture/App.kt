@@ -14,22 +14,22 @@ import com.che.architecture.atomic.design.bottom.BottomNavigationBar
 import com.che.architecture.atomic.design.foundation.ArchitectureTheme
 import com.che.architecture.atomic.design.tabs.BottomTab
 import com.che.architecture.base.mvi.interfaces.MviViewModel
-import com.che.architecture.di.GRAPH
+import com.che.architecture.di.graph
 import com.che.architecture.features.shared.app.AppIntentions
 import com.che.architecture.features.shared.app.AppMviState
 import com.che.architecture.features.shared.app.AppUiEvent
+import com.che.architecture.features.shared.di.appModuleName
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import com.che.architecture.navigation.TabNavigation
 import com.che.architecture.navigation.routeBindWithTab
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.koin.compose.koinInject
-import org.koin.core.qualifier.named
 
 @Composable
 internal fun App(
-    appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent> = koinInject(),
-    navigationGraphs: Set<NavigationGraphBuilder> = koinInject(named(GRAPH))
+    appViewModel: MviViewModel<AppMviState, AppIntentions, AppUiEvent> = koinInject(appModuleName),
+    navigationGraphs: Set<NavigationGraphBuilder> = koinInject(graph)
 ) {
 
     val tabNavigation = TabNavigation(navigationGraphs)

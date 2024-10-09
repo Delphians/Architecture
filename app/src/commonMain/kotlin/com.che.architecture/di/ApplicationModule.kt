@@ -1,19 +1,22 @@
 package com.che.architecture.di
 
-import com.che.architecture.features.chart.di.CHART_NAVIGATION
+import com.che.architecture.domain.utils.StringQualifierName
 import com.che.architecture.features.chart.di.chartNavigationModule
-import com.che.architecture.features.homepage.di.HOMEPAGE_NAVIGATION
+import com.che.architecture.features.chart.di.chartNavigationModuleName
 import com.che.architecture.features.homepage.di.homepageNavigationModule
-import com.che.architecture.features.payments.di.PAYMENTS_NAVIGATION
+import com.che.architecture.features.homepage.di.homepageNavigationModuleName
 import com.che.architecture.features.payments.di.paymentsNavigationModule
+import com.che.architecture.features.payments.di.paymentsNavigationModuleName
 import com.che.architecture.features.shared.di.appModule
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import org.koin.core.qualifier.StringQualifier
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-internal const val GRAPH = "GRAPH"
+internal val graph: StringQualifier by StringQualifierName(named("graph"))
 
-val applicationModule = module {
+internal val applicationModule = module {
+
     includes(
         appModule,
         chartNavigationModule,
@@ -21,11 +24,17 @@ val applicationModule = module {
         homepageNavigationModule
     )
 
-    single<Set<NavigationGraphBuilder>>(named(GRAPH)) {
+    single<Set<NavigationGraphBuilder>>(graph) {
         setOf(
-            get(named(HOMEPAGE_NAVIGATION)),
-            get(named(PAYMENTS_NAVIGATION)),
-            get(named(CHART_NAVIGATION))
+            get(homepageNavigationModuleName),
+            get(paymentsNavigationModuleName),
+            get(chartNavigationModuleName)
         )
     }
+
+    single(named("tiingoBaseUrl")) {
+        "api.tiingo.com/tiingo/"
+    }
+
+    single(named("tiingoToken")) { "" }
 }

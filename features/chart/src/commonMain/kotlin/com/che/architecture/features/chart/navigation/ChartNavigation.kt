@@ -12,7 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.che.architecture.atomic.design.molecules.WarningScreen
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.domain.fakes.FakeStockData
-import com.che.architecture.features.chart.di.loadModules
+import com.che.architecture.features.chart.di.chartModuleName
 import com.che.architecture.features.chart.mvi.ChartIntention
 import com.che.architecture.features.chart.mvi.ChartState
 import com.che.architecture.features.chart.mvi.ChartUiEvent
@@ -20,13 +20,14 @@ import com.che.architecture.features.chart.navigation.ChartGraph.ChartRouteScree
 import com.che.architecture.features.chart.screens.ChartScreen
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
+import org.koin.core.component.get
 
 internal class ChartNavigation : NavigationGraphBuilder, KoinComponent {
 
     override val route: String = CHART_GRAPH_ROUTE
 
-    private val viewModel: MviViewModel<ChartState, ChartIntention, ChartUiEvent> by inject()
+    private val viewModel: MviViewModel<ChartState, ChartIntention, ChartUiEvent> =
+        get(chartModuleName)
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -51,18 +52,18 @@ internal class ChartNavigation : NavigationGraphBuilder, KoinComponent {
                     }
 
                     DisposableEffect(Unit) {
-                        loadModules()
                         viewModel.start(scope)
+
+                        viewModel.dispatchIntention(
+                            ChartIntention.InitialIntention(FakeStockData.fakeClosePricePoints)
+                        )
+
                         onDispose {
                             viewModel.stop()
                         }
                     }
                 }
             }
-
-            viewModel.dispatchIntention(
-                ChartIntention.InitialIntention(FakeStockData.fakeClosePricePoints)
-            )
         }
     }
 }

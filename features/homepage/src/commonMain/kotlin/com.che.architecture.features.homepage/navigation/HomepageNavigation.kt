@@ -11,7 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.domain.model.Ticker
-import com.che.architecture.features.homepage.di.loadModules
+import com.che.architecture.features.homepage.di.homepageModuleName
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
@@ -30,7 +30,9 @@ internal class HomepageNavigation : NavigationGraphBuilder, KoinComponent {
     override val route: String = HOMEPAGE_GRAPH_ROUTE
 
     private val viewModel:
-            MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent> by inject()
+            MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent> by inject(
+        homepageModuleName
+    )
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -50,7 +52,6 @@ internal class HomepageNavigation : NavigationGraphBuilder, KoinComponent {
             val scope = LocalLifecycleOwner.current.lifecycleScope
 
             LifecycleEventEffect(Lifecycle.Event.ON_START) {
-                loadModules()
                 viewModel.start(scope)
                 viewModel.event.onEach {
                     when (it) {

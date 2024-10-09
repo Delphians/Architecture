@@ -13,6 +13,7 @@ navigation = "2.7.0-alpha07"
 lifecycle = "2.8.2"
 room = "2.7.0-alpha08"
 koin = "4.0.0"
+koin-annotation = "1.4.0-RC4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -43,6 +44,8 @@ room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 #koin
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koin-annotation" }
+koin-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koin-annotation" }
 
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }

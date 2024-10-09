@@ -12,53 +12,75 @@ import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
 import com.che.architecture.domain.di.errorDomainModule
 import com.che.architecture.domain.di.useCaseModule
+import com.che.architecture.domain.utils.StringQualifierName
+import com.che.architecture.domain.utils.className
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
 import com.che.architecture.features.payments.mvi.processor.EmptyIntentionProcessor
 import com.che.architecture.features.payments.mvi.processor.FailureIntentionProcessor
 import com.che.architecture.features.payments.mvi.processor.GetTickerPriceIntentionProcessor
-import org.koin.core.context.loadKoinModules
+import org.koin.core.qualifier.StringQualifier
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-internal fun loadModules() {
-    loadKoinModules(paymentsModule)
-}
+internal val paymentsModuleName: StringQualifier
+        by StringQualifierName(named("paymentsModule"))
 
 internal val paymentsModule = module {
 
     includes(useCaseModule, errorDomainModule)
 
-    single<MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>> {
-        DefaultViewModel(
-            stateStore = get(),
-            eventsListener = get(),
-            intentionProcessors = get(),
-            intentionDispatcher = get()
-        )
+    val handler = DefaultEventsHandler<PaymentsUiEvent>()
+
+    single<EventsListener<PaymentsUiEvent>>(paymentsModuleName) {
+        handler
     }
 
-    single<EventsListener<PaymentsUiEvent>> {
-        DefaultEventsHandler()
+    single<EventsDispatcher<PaymentsUiEvent>>(paymentsModuleName) {
+        handler
     }
 
-    single<EventsDispatcher<PaymentsUiEvent>> {
-        DefaultEventsHandler()
-    }
-
-    single<StateStore<PaymentsState>> {
+    single<StateStore<PaymentsState>>(paymentsModuleName) {
         DefaultStateStore(PaymentsState())
     }
 
-    single<IntentionDispatcher<PaymentsIntention>> {
+    single<IntentionDispatcher<PaymentsIntention>>(paymentsModuleName) {
         DefaultIntentionDispatcher()
     }
 
-    single<Set<IntentionProcessor<PaymentsState, PaymentsIntention>>> {
+    single<Set<IntentionProcessor<PaymentsState, PaymentsIntention>>>(paymentsModuleName) {
         setOf(
-            GetTickerPriceIntentionProcessor(get()),
-            FailureIntentionProcessor(),
-            EmptyIntentionProcessor()
+            get(named(EmptyIntentionProcessor::class.className())),
+            get(named(FailureIntentionProcessor::class.className())),
+            get(named(GetTickerPriceIntentionProcessor::class.className()))
+        )
+    }
+
+    single<IntentionProcessor<PaymentsState, PaymentsIntention>>(named(EmptyIntentionProcessor::class.className())) {
+        EmptyIntentionProcessor()
+    }
+
+    single<IntentionProcessor<PaymentsState, PaymentsIntention>>(named(FailureIntentionProcessor::class.className())) {
+        FailureIntentionProcessor()
+    }
+
+    single<IntentionProcessor<PaymentsState, PaymentsIntention>>(
+        named(
+            GetTickerPriceIntentionProcessor::class.className()
+        )
+    ) {
+        GetTickerPriceIntentionProcessor(get())
+    }
+
+    single<MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>>(paymentsModuleName) {
+        DefaultViewModel(
+            stateStore = get(paymentsModuleName),
+            eventsListener = get(paymentsModuleName),
+            intentionProcessors = get<Set<IntentionProcessor<PaymentsState, PaymentsIntention>>>(
+                paymentsModuleName
+            ),
+            intentionDispatcher = get(paymentsModuleName)
         )
     }
 }

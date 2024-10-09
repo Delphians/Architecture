@@ -1,14 +1,18 @@
 package com.che.architecture.features.payments.di
 
+import com.che.architecture.domain.utils.StringQualifierName
 import com.che.architecture.features.payments.navigation.PaymentsNavigation
 import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
+import org.koin.core.qualifier.StringQualifier
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-const val PAYMENTS_NAVIGATION = "PaymentsNavigation"
+val paymentsNavigationModuleName: StringQualifier
+        by StringQualifierName(named("PaymentsNavigation"))
 
 val paymentsNavigationModule = module {
-    single<NavigationGraphBuilder>(named(PAYMENTS_NAVIGATION)) {
+    includes(paymentsModule)
+    single<NavigationGraphBuilder>(paymentsNavigationModuleName) {
         PaymentsNavigation()
     }
 }
