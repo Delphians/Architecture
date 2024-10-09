@@ -13,8 +13,11 @@ kotlin {
             implementation(projects.base)
             implementation(projects.domain)
             implementation(projects.data.remoteDatasource)
+
             implementation(libs.datetime)
             implementation(libs.serialization)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

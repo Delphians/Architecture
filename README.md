@@ -1,12 +1,13 @@
-Hello, Friends!   
+Hello, Friends!
 
 Kotlin Multiplatform application (Android + IOS).
 
-The app downloads stock prices data from Tiingo. Show the list of the prices and draw a chart. 
+The app downloads stock prices data from Tiingo. Show the list of the prices and draw a chart.
 
-# Tech stack of the project:   
-    `Clean Architecture, Single Activity, MVI, Coroutines, Room 
-     Compose Multiplatform, Material3, Atomic design, Ktor, Compose Navigation`
+# Tech stack of the project:
+
+    `Clean Architecture, Single Activity, MVI, Coroutines, Koin, Room, 
+     Ktor, Compose Navigation, Compose Multiplatform, Material3, Atomic design`
 
 # The structure of the project:
 
@@ -14,31 +15,31 @@ The app downloads stock prices data from Tiingo. Show the list of the prices and
 * `atomicDesign`          - Compose components and Atomic foundation
 * `base`                  - MVI base classes
 * `data:common`           - Common repositories
-* `data:remoteDatasource` - Ktor framework, Tiingo data source for getting stocks prices 
-* `data:localDatasource`  - Room database for saving prices data 
-* `domain`                - Business logic and fake data 
-* `features:shared`       - App Mvi classes, the logic for all features 
+* `data:remoteDatasource` - Ktor framework, Tiingo data source for getting stocks prices
+* `data:localDatasource`  - Room database for saving prices data
+* `domain`                - Business logic and fake data
+* `features:shared`       - App Mvi classes, the logic for all features
 * `features:chart`        - Draw the fake chart
-* `features:homepage`     - The first screen displays the ticker (the circle is clickable). 
-                            The second screen displays details about the ticker.
+* `features:homepage`     - The first screen displays the ticker (the circle is clickable).
+  The second screen displays details about the ticker.
 * `features:payments`     - Show the fake close prices of the ticker for one year by days
 * `iosApp`                - IOS Platform folder
 * `plugins`               - Gradle settings and custom plugins
 
-# What the app allows you to do? 
+# What the app allows you to do?
 
 * The project supports `Light` and `Dark` mode
 * Choosing different build variants - `production/staging, debug/release`
-* Start the static code analysis using Detekt - `./gradlew detekt`  
-* Tests for processors, usecases, repositories and datasources 
+* Start the static code analysis using Detekt - `./gradlew detekt`
+* Tests for processors, usecases, repositories and datasources
 
 # Future plans
 
 * Support rotation, lifecycle
 * Check the network communication
-* Add navigation tests  
-* Add Koin, ExoPlayer(DASH over HTTPs), Location (Google Maps SDK), Pushes, GraphQL, Websockets, 
-BLE, NFC features, Stripe 
+* Add navigation tests
+* Add ExoPlayer(DASH over HTTPs), Location (Google Maps SDK), Pushes, GraphQL, Websockets,
+  BLE, NFC features, Stripe
 
 # If you have any questions
 

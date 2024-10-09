@@ -15,8 +15,12 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.atomicDesign)
             implementation(projects.base)
+            implementation(projects.domain)
+
             implementation(compose.ui)
             implementation(libs.compose.navigation)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

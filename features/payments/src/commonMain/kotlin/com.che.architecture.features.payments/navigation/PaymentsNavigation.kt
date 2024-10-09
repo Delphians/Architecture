@@ -17,10 +17,11 @@ import com.che.architecture.atomic.design.resources.Res
 import com.che.architecture.atomic.design.resources.error
 import com.che.architecture.base.mvi.interfaces.EventsListener
 import com.che.architecture.base.mvi.interfaces.MviViewModel
+import com.che.architecture.domain.di.errorDomainModuleName
 import com.che.architecture.domain.fakes.FakeStockData
 import com.che.architecture.domain.model.ErrorEvent
 import com.che.architecture.domain.model.Ticker
-import com.che.architecture.features.payments.di.PaymentsModule.getViewModel
+import com.che.architecture.features.payments.di.paymentsModuleName
 import com.che.architecture.features.payments.mvi.PaymentsIntention
 import com.che.architecture.features.payments.mvi.PaymentsState
 import com.che.architecture.features.payments.mvi.PaymentsUiEvent
@@ -29,11 +30,16 @@ import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.jetbrains.compose.resources.stringResource
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-internal class PaymentsNavigation(
-    private val errorListener: EventsListener<ErrorEvent>,
-    private val viewModel: MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent> = getViewModel()
-) : NavigationGraphBuilder {
+internal class PaymentsNavigation : NavigationGraphBuilder, KoinComponent {
+
+    private val viewModel:
+            MviViewModel<PaymentsState, PaymentsIntention, PaymentsUiEvent>
+            by inject(paymentsModuleName)
+
+    private val errorListener: EventsListener<ErrorEvent> by inject(errorDomainModuleName)
 
     override val route: String = PAYMENTS_GRAPH_ROUTE
 
@@ -48,9 +54,7 @@ internal class PaymentsNavigation(
             val scope = LocalLifecycleOwner.current.lifecycleScope
 
             DisposableEffect(Unit) {
-
                 viewModel.start(scope)
-
                 viewModel.dispatchIntention(
                     PaymentsIntention.GetTickerPriceIntention(
                         Ticker(FakeStockData.fakeTicker.value),

@@ -1,27 +1,19 @@
 package com.che.architecture.data.common.di
 
-import com.che.architecture.base.mvi.interfaces.EventsDispatcher
 import com.che.architecture.data.common.repositories.StockPricesRepositoryImpl
-import com.che.architecture.data.remote.datasource.di.RemoteDataSourceModule
-import com.che.architecture.domain.di.ErrorDomainModule
-import com.che.architecture.domain.model.ErrorEvent
+import com.che.architecture.data.remote.datasource.di.remoteDataSourceModule
+import com.che.architecture.domain.di.errorDomainModuleName
 import com.che.architecture.domain.repositories.StockPricesRepository
+import org.koin.dsl.module
 
-object RepositoriesModule {
+val repositoriesModule = module {
 
-    private val errorDispatcher: EventsDispatcher<ErrorEvent> =
-        ErrorDomainModule.provideEventDispatcher()
+    includes(remoteDataSourceModule)
 
-    fun provideStockPricesRepository(
-        tiingoBaseUrl: String,
-        tiingoToken: String
-    ): StockPricesRepository {
-        return StockPricesRepositoryImpl(
-            errorDispatcher = errorDispatcher,
-            tiingoDataSource = RemoteDataSourceModule.provideTiingoDataSource(
-                tiingoBaseUrl,
-                tiingoToken
-            )
+    single<StockPricesRepository> {
+        StockPricesRepositoryImpl(
+            errorDispatcher = get(errorDomainModuleName),
+            tiingoDataSource = get()
         )
     }
 }

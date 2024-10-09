@@ -9,25 +9,30 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
-import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreen
-import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreenDetails
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.domain.model.Ticker
-import com.che.architecture.features.homepage.di.HomepageModule.getViewModel
+import com.che.architecture.features.homepage.di.homepageModuleName
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageIntention
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageState
 import com.che.architecture.features.homepage.mvi.homeScreen.HomepageUiEvent
+import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreen
+import com.che.architecture.features.homepage.navigation.HomepageGraph.HomeScreenDetails
 import com.che.architecture.features.homepage.screens.HomeScreen
 import com.che.architecture.features.homepage.screens.HomeScreenDetails
+import com.che.architecture.features.shared.navigation.NavigationGraphBuilder
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-internal class HomepageNavigation : NavigationGraphBuilder {
+internal class HomepageNavigation : NavigationGraphBuilder, KoinComponent {
 
     override val route: String = HOMEPAGE_GRAPH_ROUTE
 
-    private lateinit var viewModel: MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent>
+    private val viewModel:
+            MviViewModel<HomepageState, HomepageIntention, HomepageUiEvent> by inject(
+        homepageModuleName
+    )
 
     override fun setupGraph(
         navGraphBuilder: NavGraphBuilder,
@@ -47,12 +52,10 @@ internal class HomepageNavigation : NavigationGraphBuilder {
             val scope = LocalLifecycleOwner.current.lifecycleScope
 
             LifecycleEventEffect(Lifecycle.Event.ON_START) {
-                viewModel = getViewModel().apply {
-                    start(scope)
-                }
+                viewModel.start(scope)
                 viewModel.event.onEach {
                     when (it) {
-                        is HomepageUiEvent.NavigateToDetails -> navHostController?.navigate(
+                        is HomepageUiEvent.NavigateToDetails -> navHostController.navigate(
                             "${HomeScreenDetails.destination}/${it.ticker.value}"
                         )
                     }

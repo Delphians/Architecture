@@ -17,6 +17,8 @@ kotlin {
             implementation(libs.datetime)
             implementation(libs.immutable.collections)
             implementation(libs.serialization)
+
+            implementation(libs.koin.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

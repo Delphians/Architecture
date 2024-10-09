@@ -41,11 +41,11 @@ internal class TabNavigation(
         }
         return destination ?: bindWithRoute(BottomTab.HOME)
     }
+}
 
-    internal fun routeBindWithTab(route: String): BottomTab = when {
-        route.equals(BottomTab.CHART.name, true) -> BottomTab.CHART
-        route.equals(BottomTab.HOME.name, true) -> BottomTab.HOME
-        route.equals(BottomTab.PAYMENTS.name, ignoreCase = true) -> BottomTab.PAYMENTS
-        else -> throw IllegalArgumentException(" Something went wrong")
-    }
+internal fun routeBindWithTab(route: String): BottomTab = when {
+    route.equals(BottomTab.CHART.name, true) -> BottomTab.CHART
+    route.equals(BottomTab.HOME.name, true) -> BottomTab.HOME
+    route.equals(BottomTab.PAYMENTS.name, ignoreCase = true) -> BottomTab.PAYMENTS
+    else -> throw IllegalArgumentException(" Something went wrong")
 }

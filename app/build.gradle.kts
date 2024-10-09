@@ -35,7 +35,7 @@ kotlin {
             implementation(libs.compose.navigation)
             implementation(libs.androidx.lifecycle.compose)
 
-            api(libs.koin.core)
+            implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
         }

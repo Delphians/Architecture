@@ -1,9 +1,5 @@
 package com.che.architecture.features.chart.di
 
-import com.che.architecture.features.chart.mvi.ChartIntention
-import com.che.architecture.features.chart.mvi.ChartState
-import com.che.architecture.features.chart.mvi.ChartUiEvent
-import com.che.architecture.features.chart.mvi.processors.InitialIntentionProcessor
 import com.che.architecture.base.mvi.DefaultEventsHandler
 import com.che.architecture.base.mvi.DefaultIntentionDispatcher
 import com.che.architecture.base.mvi.DefaultStateStore
@@ -14,31 +10,56 @@ import com.che.architecture.base.mvi.interfaces.IntentionDispatcher
 import com.che.architecture.base.mvi.interfaces.IntentionProcessor
 import com.che.architecture.base.mvi.interfaces.MviViewModel
 import com.che.architecture.base.mvi.interfaces.StateStore
+import com.che.architecture.domain.utils.StringQualifierName
+import com.che.architecture.domain.utils.className
+import com.che.architecture.features.chart.mvi.ChartIntention
+import com.che.architecture.features.chart.mvi.ChartState
+import com.che.architecture.features.chart.mvi.ChartUiEvent
+import com.che.architecture.features.chart.mvi.processors.InitialIntentionProcessor
+import org.koin.core.qualifier.StringQualifier
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-internal object ChartModule {
+internal val chartModuleName: StringQualifier by StringQualifierName(named("chartModule"))
 
-    fun getViewModel(): MviViewModel<ChartState, ChartIntention, ChartUiEvent> =
-        DefaultViewModel(
-            stateStore = getStateStore(),
-            eventsListener = getEventListener(),
-            intentionProcessors = getProcessors(),
-            intentionDispatcher = getIntentionDispatcher()
-        )
+internal val chartModule = module {
 
-    private val eventHandler = DefaultEventsHandler<ChartUiEvent>()
+    val handler = DefaultEventsHandler<ChartUiEvent>()
 
-    private fun getEventListener(): EventsListener<ChartUiEvent> =
-        eventHandler
+    single<EventsListener<ChartUiEvent>>(chartModuleName) {
+        handler
+    }
 
-    private fun getEventDispatcher(): EventsDispatcher<ChartUiEvent> =
-        eventHandler
+    single<EventsDispatcher<ChartUiEvent>>(chartModuleName) {
+        handler
+    }
 
-    private fun getIntentionDispatcher(): IntentionDispatcher<ChartIntention> =
-        DefaultIntentionDispatcher()
-
-    private fun getStateStore(): StateStore<ChartState> =
+    single<StateStore<ChartState>>(chartModuleName) {
         DefaultStateStore(ChartState())
+    }
 
-    private fun getProcessors(): Set<IntentionProcessor<ChartState, ChartIntention>> =
-        setOf(InitialIntentionProcessor())
+    single<IntentionDispatcher<ChartIntention>>(chartModuleName) {
+        DefaultIntentionDispatcher()
+    }
+
+    single<Set<IntentionProcessor<ChartState, ChartIntention>>>(chartModuleName) {
+        setOf(
+            get(named(InitialIntentionProcessor::class.className()))
+        )
+    }
+
+    single<IntentionProcessor<ChartState, ChartIntention>>(named(InitialIntentionProcessor::class.className())) {
+        InitialIntentionProcessor()
+    }
+
+    single<MviViewModel<ChartState, ChartIntention, ChartUiEvent>>(chartModuleName) {
+        DefaultViewModel(
+            stateStore = get(chartModuleName),
+            eventsListener = get(chartModuleName),
+            intentionProcessors = get<Set<IntentionProcessor<ChartState, ChartIntention>>>(
+                chartModuleName
+            ),
+            intentionDispatcher = get(chartModuleName)
+        )
+    }
 }

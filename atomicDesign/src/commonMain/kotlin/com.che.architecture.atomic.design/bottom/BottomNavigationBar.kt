@@ -15,7 +15,7 @@ import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun BottomNavigationBar(
-    tabs: List<BottomTab>,
+    tabs: List<BottomTab> = BottomTab.entries.toList(),
     currentTab: BottomTab,
     onClick: (BottomTab) -> Unit
 ) {
