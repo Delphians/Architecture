@@ -38,6 +38,9 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
 
+            implementation(libs.kermit)
+            implementation(libs.kermit.koin)
+
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
