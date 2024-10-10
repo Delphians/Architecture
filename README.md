@@ -6,8 +6,7 @@ The app downloads stock prices data from Tiingo. Show the list of the prices and
 
 # Tech stack of the project:
 
-    `Clean Architecture, Single Activity, MVI, Coroutines, Koin, Room, 
-     Ktor, Compose Navigation, Compose Multiplatform, Material3, Atomic design`
+    `Clean Architecture, Single Activity, MVI, Coroutines, Koin, Room, Detekt, Ktor, Compose Navigation, Compose Multiplatform, Material3, Atomic design, Kermit`
 
 # The structure of the project:
 
