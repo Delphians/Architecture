@@ -3,7 +3,7 @@ package com.che.architecture
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -36,7 +36,7 @@ internal fun App(
     val scope = LocalLifecycleOwner.current.lifecycleScope
     val navController = rememberNavController()
 
-    DisposableEffect(Unit) {
+    LaunchedEffect(Unit) {
 
         appViewModel.start(scope)
 
@@ -52,11 +52,7 @@ internal fun App(
                     }
                 }
             }
-        }.launchIn(scope)
-
-        onDispose {
-            appViewModel.stop()
-        }
+        }.launchIn(appViewModel.getScope())
     }
 
     val navBackStackEntry = navController.currentBackStackEntryAsState()

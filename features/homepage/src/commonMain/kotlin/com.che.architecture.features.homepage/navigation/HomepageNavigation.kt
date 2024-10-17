@@ -1,8 +1,7 @@
 package com.che.architecture.features.homepage.navigation
 
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavGraphBuilder
@@ -51,7 +50,7 @@ internal class HomepageNavigation : NavigationGraphBuilder, KoinComponent {
 
             val scope = LocalLifecycleOwner.current.lifecycleScope
 
-            LifecycleEventEffect(Lifecycle.Event.ON_START) {
+            LaunchedEffect(Unit) {
                 viewModel.start(scope)
                 viewModel.event.onEach {
                     when (it) {
@@ -60,10 +59,6 @@ internal class HomepageNavigation : NavigationGraphBuilder, KoinComponent {
                         )
                     }
                 }.launchIn(viewModel.getScope())
-            }
-
-            LifecycleEventEffect(Lifecycle.Event.ON_STOP) {
-                viewModel.stop()
             }
         }
     }
