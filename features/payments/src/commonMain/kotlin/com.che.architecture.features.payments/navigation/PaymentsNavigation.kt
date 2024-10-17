@@ -2,7 +2,7 @@ package com.che.architecture.features.payments.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -53,7 +53,7 @@ internal class PaymentsNavigation : NavigationGraphBuilder, KoinComponent {
 
             val scope = LocalLifecycleOwner.current.lifecycleScope
 
-            DisposableEffect(Unit) {
+            LaunchedEffect(Unit) {
                 viewModel.start(scope)
                 viewModel.dispatchIntention(
                     PaymentsIntention.GetTickerPriceIntention(
@@ -68,10 +68,6 @@ internal class PaymentsNavigation : NavigationGraphBuilder, KoinComponent {
                         )
                     }
                 }.launchIn(viewModel.getScope())
-
-                onDispose {
-                    viewModel.stop()
-                }
             }
 
             NavHost(

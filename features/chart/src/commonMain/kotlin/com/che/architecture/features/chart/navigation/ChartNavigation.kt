@@ -1,6 +1,6 @@
 package com.che.architecture.features.chart.navigation
 
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.LocalLifecycleOwner
@@ -51,16 +51,12 @@ internal class ChartNavigation : NavigationGraphBuilder, KoinComponent {
                         WarningScreen()
                     }
 
-                    DisposableEffect(Unit) {
+                    LaunchedEffect(Unit) {
                         viewModel.start(scope)
 
                         viewModel.dispatchIntention(
                             ChartIntention.InitialIntention(FakeStockData.fakeClosePricePoints)
                         )
-
-                        onDispose {
-                            viewModel.stop()
-                        }
                     }
                 }
             }

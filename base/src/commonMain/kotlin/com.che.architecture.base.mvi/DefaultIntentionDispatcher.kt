@@ -17,6 +17,6 @@ class DefaultIntentionDispatcher<Intention : Any> :
 
     companion object {
         private const val MAX_BUFFER_SIZE = 1000
-        private const val MAX_CACHE_SIZE = 1
+        private const val MAX_CACHE_SIZE = 0
     }
 }

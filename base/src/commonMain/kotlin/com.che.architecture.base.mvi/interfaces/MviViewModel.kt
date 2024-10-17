@@ -15,6 +15,4 @@ interface MviViewModel<MviState : Any, Intention : Any, Event : Any> {
     fun dispatchIntention(intention: Intention)
 
     fun start(scope: CoroutineScope)
-
-    fun stop()
 }
